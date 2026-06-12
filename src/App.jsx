@@ -1137,10 +1137,6 @@ function Dock({ openApps, minimizedApps, toggleApp }) {
       <div className="mx-3 mb-1 h-11 w-[2.5px] bg-white/35 rounded-full shrink-0 self-end" />
 
       <div className="flex items-end pr-1 space-x-2.5">
-        <SocialDockIcon href="https://mail.google.com/mail/?view=cm&fs=1&to=piyushprasad121@gmail.com" title="Gmail" bgColor="bg-[#EA4335]" mouseX={mouseX} target="_blank">
-          <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg>
-        </SocialDockIcon>
-
         <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
           <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </SocialDockIcon>
