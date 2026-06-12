@@ -226,19 +226,19 @@ const DOCK_APPS = [
 
               {/* Project 3 */}
               <div className="space-y-1">
-                <p className="font-bold text-neutral-900 text-lg">Bacola Shopping</p>
+                <p className="font-bold text-neutral-900 text-lg">The Portrait Gallery</p>
                 <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
-                  <li>Engineered a scalable e-commerce application using React, Tailwind CSS, Firebase, and Stripe, enabling secure authentication, payment processing, and product management.</li>
-                  <li>Developed responsive user interfaces and optimized application performance through modern frontend architecture, API integration, and state management practices.</li>
+                  <li>Engineered a visually immersive portfolio platform utilizing HTML, CSS, JavaScript, Framer, and Spline, delivering responsive layouts, interactive 3D experiences, and modern frontend architecture.</li>
+                  <li>Optimized website performance, user engagement, and digital presence through SEO best practices, intuitive UI/UX design, and scalable web development methodologies.</li>
                 </ul>
               </div>
 
               {/* Project 4 */}
               <div className="space-y-1">
-                <p className="font-bold text-neutral-900 text-lg">Personal Portfolio</p>
+                <p className="font-bold text-neutral-900 text-lg">Bacola Shopping</p>
                 <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
-                  <li>Designed and developed a high-performance portfolio website using React, Vite, Tailwind CSS, and Framer Motion, showcasing projects, technical expertise, and professional achievements.[cite: 2]</li>
-                  <li>Implemented responsive design principles, SEO optimization, and interactive UI animations to enhance user engagement and improve overall web performance.</li>
+                  <li>Engineered a scalable e-commerce application using React, Tailwind CSS, Firebase, and Stripe, enabling secure authentication, payment processing, and product management.</li>
+                  <li>Developed responsive user interfaces and optimized application performance through modern frontend architecture, API integration, and state management practices.</li>
                 </ul>
               </div>
             </div>
@@ -346,36 +346,514 @@ const DOCK_APPS = [
 const INITIAL_DESKTOP_FILES = [
   {
     id: 'file-1',
-    title: 'Project Alpha Long Name Document',
-    iconBgColor: 'bg-blue-500',
-    windowContent: <div className="p-6 text-neutral-800 font-medium">📁 Custom Project Alpha specifications and read-only text elements.</div>
+    title: 'MERN AI Chatbot',
+    isImageIcon: true,
+    iconPath: '/mern-ai-chatbot.png',
+    windowContent: React.createElement(() => {
+      // Internal state to track which image is currently popped up/clicked
+      const [activeImg, setActiveImg] = useState(null);
+
+      const galleryItems = [
+        {
+          src: "/mern-ai-chatbot/mern-ai-chatbot-one.png",
+          alt: "Modern Landing Experience",
+          caption: "Clean, responsive homepage showcasing the AI chatbot platform with intuitive navigation and modern UI design."
+        },
+        {
+          src: "/mern-ai-chatbot/mern-ai-chatbot-two.png",
+          alt: "Secure User Authentication",
+          caption: "JWT-powered registration and authentication system ensuring secure account creation and protected access."
+        },
+        {
+          src: "/mern-ai-chatbot/mern-ai-chatbot-three.png",
+          alt: "AI-Powered Conversations",
+          caption: "Real-time chatbot interface powered by OpenAI APIs, delivering intelligent responses with persistent chat history."
+        },
+        {
+          src: "/mern-ai-chatbot/mern-ai-chatbot-four.png",
+          alt: "Fully Responsive Design",
+          caption: "Optimized user experience across desktop, tablet, and mobile devices with seamless adaptive layouts."
+        }
+      ];
+
+      return (
+        <div className="relative h-full w-full overflow-hidden font-sans select-text text-neutral-800 bg-white">
+          <div className="p-8 space-y-8 overflow-y-auto h-full pb-6">
+            {/* Title Heading Section */}
+            <div className="border-b border-neutral-200 pb-3 select-none">
+              <h2 className="text-3xl font-bold tracking-tight text-neutral-900">MERN AI Chatbot</h2>
+              <p className="text-sm font-medium text-neutral-500 mt-1">Full-Stack Intelligent Conversation Platform</p>
+            </div>
+            
+            {/* Project Key Achievements Log */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Key Contributions & Features</h3>
+              <ul className="list-disc list-outside pl-5 space-y-2.5 text-[15px] text-neutral-700 font-medium leading-relaxed">
+                <li>Developed a full-stack AI chatbot application using the MERN stack, TypeScript, and OpenAI APIs, featuring JWT authentication, session management, and role-based access control.</li>
+                <li>Designed scalable backend architecture with MongoDB database integration, secure REST APIs, and real-time conversation storage for seamless user interactions.</li>
+                <li>Improved user engagement and retention by enabling 24/7 AI-powered assistance, supporting 500+ conversations per month with low-latency responses and consistent user experience.</li>
+                <li>Optimized application performance through efficient API handling and database design, reducing response times by 35% and achieving 99.9% conversation data reliability for stored chat sessions.</li>
+              </ul>
+            </div>
+
+            {/* Pictures Media Gallery Grid Section */}
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Project Architecture & Interface Gallery</h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {galleryItems.map((item, index) => (
+                  <div 
+                    key={index} 
+                    onClick={() => setActiveImg(item)}
+                    className="border border-neutral-200 p-2.5 rounded-xl bg-neutral-50 shadow-sm flex flex-col space-y-2 cursor-zoom-in hover:border-neutral-400 transition-colors duration-150 group"
+                  >
+                    <div className="w-full h-40 bg-neutral-200 rounded-lg overflow-hidden relative">
+                      <img src={item.src} alt={item.alt} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200" />
+                    </div>
+                    <span className="text-xs font-medium text-neutral-500 text-center block pt-1 select-none">
+                      {item.alt}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Premium Minimalist Pop-up Modal Layer */}
+          <AnimatePresence>
+            {activeImg && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveImg(null)}
+                className="absolute inset-0 bg-white/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 cursor-zoom-out"
+              >
+                {/* Image Scale Presentation Container */}
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.96, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="max-w-[90%] max-h-[75%] bg-white border border-neutral-200 p-2 rounded-2xl shadow-xl flex flex-col items-center"
+                  onClick={(e) => e.stopPropagation()} // Stop bubble closing logic on image click
+                >
+                  <img 
+                    src={activeImg.src} 
+                    alt={activeImg.alt} 
+                    className="w-full h-full object-contain rounded-xl max-h-[400px]" 
+                  />
+                </motion.div>
+
+                {/* Caption Field Element */}
+                <motion.div
+                  initial={{ y: 8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 8, opacity: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="mt-4 text-center select-none max-w-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-sm font-bold text-neutral-900 tracking-tight">{activeImg.alt}</p>
+                  <p className="text-xs font-medium text-neutral-500 mt-0.5">{activeImg.caption}</p>
+                  
+                  <button 
+                    onClick={() => setActiveImg(null)}
+                    className="mt-4 text-xs font-bold text-neutral-500 hover:text-neutral-900 border border-neutral-200 rounded-lg px-3 py-1.5 hover:bg-neutral-50 transition-colors"
+                  >
+                    Close Preview
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    })
   },
   {
     id: 'file-2',
-    title: 'Resume.pdf',
-    iconBgColor: 'bg-red-500',
-    windowContent: <div className="p-6 text-neutral-800 font-medium">📄 Interactive PDF viewer shell or mock Resume layout data details.</div>
+    title: 'Warranty Vault',
+    isImageIcon: true,
+    iconPath: '/warranty-vault.png',
+    windowContent: React.createElement(() => {
+      const [activeImg, setActiveImg] = useState(null);
+
+      const galleryItems = [
+        {
+          src: "/warranty-vault/warranty-vault-one.png",
+          alt: "Secure User Authentication",
+          caption: "Fast and secure account access with streamlined user registration and authentication."
+        },
+        {
+          src: "/warranty-vault/warranty-vault-two.png",
+          alt: "AI-Powered Receipt Scanning",
+          caption: "Upload receipts instantly and extract billing and warranty details through intelligent document processing."
+        },
+        {
+          src: "/warranty-vault/warranty-vault-three.png",
+          alt: "Centralized Warranty Dashboard",
+          caption: "Manage purchases, monitor warranty status, and access important product information from a single dashboard."
+        },
+        {
+          src: "/warranty-vault/warranty-vault-four.png",
+          alt: "Personalized App Controls",
+          caption: "Configure notifications, account preferences, and warranty tracking settings for a customized experience."
+        }
+      ];
+
+      return (
+        <div className="relative h-full w-full overflow-hidden font-sans select-text text-neutral-800 bg-white">
+          <div className="p-8 space-y-8 overflow-y-auto h-full pb-6">
+            {/* Title Heading Section */}
+            <div className="border-b border-neutral-200 pb-3 select-none">
+              <h2 className="text-3xl font-bold tracking-tight text-neutral-900">Warranty Vault</h2>
+              <p className="text-sm font-medium text-neutral-500 mt-1">Intelligent Document Processing & Lifecycle Management</p>
+            </div>
+            
+            {/* Project Achievements Log */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Key Contributions & Features</h3>
+              <ul className="list-disc list-outside pl-5 space-y-2.5 text-[15px] text-neutral-700 font-medium leading-relaxed">
+                <li>Built an AI-powered Android application that automates receipt scanning and extracts billing and warranty information using intelligent document processing techniques.</li>
+                <li>Implemented Room Database for secure local data storage and background notification services to proactively track warranty expiration timelines.</li>
+                <li>Reduced manual warranty management effort by 80%, enabling users to organize and retrieve 1,000+ purchase records efficiently through automated data extraction.</li>
+                <li>Improved warranty claim preparedness with automated reminder notifications, helping users avoid missed warranty deadlines and increasing tracking accuracy by 90%.</li>
+              </ul>
+            </div>
+
+            {/* Media Gallery Grid Section */}
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Application Interface & Execution Gallery</h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {galleryItems.map((item, index) => (
+                  <div 
+                    key={index} 
+                    onClick={() => setActiveImg(item)}
+                    className="border border-neutral-200 p-2.5 rounded-xl bg-neutral-50 shadow-sm flex flex-col space-y-2 cursor-zoom-in hover:border-neutral-400 transition-colors duration-150 group"
+                  >
+                    <div className="w-full h-40 bg-neutral-200 rounded-lg overflow-hidden relative">
+                      <img src={item.src} alt={item.alt} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200" />
+                    </div>
+                    <span className="text-xs font-medium text-neutral-500 text-center block pt-1 select-none">
+                      {item.alt}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Minimalist Zoom Pop-up Modal Layer */}
+          <AnimatePresence>
+            {activeImg && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveImg(null)}
+                className="absolute inset-0 bg-white/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 cursor-zoom-out"
+              >
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.96, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="max-w-[90%] max-h-[75%] bg-white border border-neutral-200 p-2 rounded-2xl shadow-xl flex flex-col items-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img 
+                    src={activeImg.src} 
+                    alt={activeImg.alt} 
+                    className="w-full h-full object-contain rounded-xl max-h-[400px]" 
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 8, opacity: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="mt-4 text-center select-none max-w-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-sm font-bold text-neutral-900 tracking-tight">{activeImg.alt}</p>
+                  <p className="text-xs font-medium text-neutral-500 mt-0.5">{activeImg.caption}</p>
+                  
+                  <button 
+                    onClick={() => setActiveImg(null)}
+                    className="mt-4 text-xs font-bold text-neutral-500 hover:text-neutral-900 border border-neutral-200 rounded-lg px-3 py-1.5 hover:bg-neutral-50 transition-colors"
+                  >
+                    Close Preview
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    })
   },
   {
     id: 'file-3',
-    title: 'Pictures and Wallpapers',
-    iconBgColor: 'bg-amber-500',
-    windowContent: <div className="p-6 text-neutral-800 font-medium">🖼️ Image album display node. Put grid graphics here.</div>
+    title: 'The Portrait Gallery',
+    isImageIcon: true,
+    iconPath: '/the-portrait-gallery.png',
+    windowContent: React.createElement(() => {
+      const [activeImg, setActiveImg] = useState(null);
+
+      const galleryItems = [
+        {
+          src: "/the-portrait-gallery/the-portrait-gallery-one.png",
+          alt: "Immersive Landing Experience",
+          caption: "Engaging homepage featuring interactive visuals, modern design, and seamless user navigation."
+        },
+        {
+          src: "/the-portrait-gallery/the-portrait-gallery-two.png",
+          alt: "Showcase of Creative Work",
+          caption: "Curated portfolio section highlighting projects, achievements, and interactive web experiences."
+        },
+        {
+          src: "/the-portrait-gallery/the-portrait-gallery-three.png",
+          alt: "Professional Story & Expertise",
+          caption: "Dedicated section presenting background, skills, and creative vision through a compelling user experience."
+        },
+        {
+          src: "/the-portrait-gallery/the-portrait-gallery-four.png",
+          alt: "Seamless Communication",
+          caption: "Intuitive contact interface designed to facilitate collaboration, inquiries, and professional connections."
+        }
+      ];
+
+      return (
+        <div className="relative h-full w-full overflow-hidden font-sans select-text text-neutral-800 bg-white">
+          <div className="p-8 space-y-8 overflow-y-auto h-full pb-6">
+            {/* Title Heading Section */}
+            <div className="border-b border-neutral-200 pb-3 select-none">
+              <h2 className="text-3xl font-bold tracking-tight text-neutral-900">The Portrait Gallery</h2>
+              <p className="text-sm font-medium text-neutral-500 mt-1">Immersive 3D Portfolio Platform & Creative Showcase</p>
+            </div>
+            
+            {/* Project Achievements Log */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Key Contributions & Features</h3>
+              <ul className="list-disc list-outside pl-5 space-y-2.5 text-[15px] text-neutral-700 font-medium leading-relaxed">
+                <li>Engineered a visually immersive portfolio platform utilizing HTML, CSS, JavaScript, Framer, and Spline, delivering responsive layouts, interactive 3D experiences, and modern frontend architecture.</li>
+                <li>Optimized website performance, user engagement, and digital presence through SEO best practices, intuitive UI/UX design, and scalable web development methodologies.</li>
+                <li>Increased user engagement by 40% through interactive 3D elements, smooth animations, and responsive design, creating an engaging cross-device browsing experience.</li>
+                <li>Enhanced website discoverability and performance by implementing SEO optimization and efficient asset management, achieving 95+ Lighthouse performance scores and faster page load times.</li>
+              </ul>
+            </div>
+
+            {/* Media Gallery Grid Section */}
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Application Interface & Presentation Gallery</h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {galleryItems.map((item, index) => (
+                  <div 
+                    key={index} 
+                    onClick={() => setActiveImg(item)}
+                    className="border border-neutral-200 p-2.5 rounded-xl bg-neutral-50 shadow-sm flex flex-col space-y-2 cursor-zoom-in hover:border-neutral-400 transition-colors duration-150 group"
+                  >
+                    <div className="w-full h-40 bg-neutral-200 rounded-lg overflow-hidden relative">
+                      <img src={item.src} alt={item.alt} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200" />
+                    </div>
+                    <span className="text-xs font-medium text-neutral-500 text-center block pt-1 select-none">
+                      {item.alt}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Minimalist Zoom Pop-up Modal Layer */}
+          <AnimatePresence>
+            {activeImg && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveImg(null)}
+                className="absolute inset-0 bg-white/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 cursor-zoom-out"
+              >
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.96, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="max-w-[90%] max-h-[75%] bg-white border border-neutral-200 p-2 rounded-2xl shadow-xl flex flex-col items-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img 
+                    src={activeImg.src} 
+                    alt={activeImg.alt} 
+                    className="w-full h-full object-contain rounded-xl max-h-[400px]" 
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 8, opacity: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="mt-4 text-center select-none max-w-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-sm font-bold text-neutral-900 tracking-tight">{activeImg.alt}</p>
+                  <p className="text-xs font-medium text-neutral-500 mt-0.5">{activeImg.caption}</p>
+                  
+                  <button 
+                    onClick={() => setActiveImg(null)}
+                    className="mt-4 text-xs font-bold text-neutral-500 hover:text-neutral-900 border border-neutral-200 rounded-lg px-3 py-1.5 hover:bg-neutral-50 transition-colors"
+                  >
+                    Close Preview
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    })
   },
   {
     id: 'file-4',
-    title: 'Source Code Production Branch',
-    iconBgColor: 'bg-emerald-600',
-    windowContent: <div className="p-6 text-neutral-800 font-mono text-xs">🚀 console.log("Hello Desktop Workspace Configuration");</div>
+    title: 'Bacola Shopping',
+    isImageIcon: true,
+    iconPath: '/bacola-shopping.png',
+    windowContent: React.createElement(() => {
+      const [activeImg, setActiveImg] = useState(null);
+
+      const galleryItems = [
+        {
+          src: "/bacola-shopping/bacola-shopping-one.png",
+          alt: "Modern Shopping Experience",
+          caption: "Responsive storefront showcasing products, categories, and a streamlined shopping journey."
+        },
+        {
+          src: "/bacola-shopping/bacola-shopping-two.png",
+          alt: "Secure User Authentication",
+          caption: "Firebase-powered authentication system enabling secure account registration and user access."
+        },
+        {
+          src: "/bacola-shopping/bacola-shopping-three.png",
+          alt: "Dynamic Shopping Cart",
+          caption: "Real-time cart management with quantity updates, price calculations, and seamless checkout preparation."
+        },
+        {
+          src: "/bacola-shopping/bacola-shopping-four.png",
+          alt: "Secure Checkout & Order Tracking",
+          caption: "Complete order summary and billing workflow with integrated payment processing and purchase confirmation."
+        }
+      ];
+
+      return (
+        <div className="relative h-full w-full overflow-hidden font-sans select-text text-neutral-800 bg-white">
+          <div className="p-8 space-y-8 overflow-y-auto h-full pb-6">
+            {/* Title Heading Section */}
+            <div className="border-b border-neutral-200 pb-3 select-none">
+              <h2 className="text-3xl font-bold tracking-tight text-neutral-900">Bacola Shopping</h2>
+              <p className="text-sm font-medium text-neutral-500 mt-1">Scalable E-Commerce Engine & Secure Transaction Node</p>
+            </div>
+            
+            {/* Project Achievements Log */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Key Contributions & Features</h3>
+              <ul className="list-disc list-outside pl-5 space-y-2.5 text-[15px] text-neutral-700 font-medium leading-relaxed">
+                <li>Engineered a scalable e-commerce application using React, Tailwind CSS, Firebase, and Stripe, enabling secure authentication, payment processing, and product management.</li>
+                <li>Developed responsive user interfaces and optimized application performance through modern frontend architecture, API integration, and state management practices.</li>
+                <li>Streamlined the online purchasing workflow by implementing secure checkout and real-time product management, supporting 500+ product listings and improving transaction efficiency by 35%.</li>
+                <li>Enhanced user experience and platform reliability through optimized rendering, responsive design, and efficient state management, resulting in 40% faster page load times and seamless cross-device accessibility.</li>
+              </ul>
+            </div>
+
+            {/* Media Gallery Grid Section */}
+            <div className="space-y-4 pt-2">
+              <h3 className="text-lg font-bold text-neutral-900 tracking-tight select-none">Application Interface & Storefront Gallery</h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {galleryItems.map((item, index) => (
+                  <div 
+                    key={index} 
+                    onClick={() => setActiveImg(item)}
+                    className="border border-neutral-200 p-2.5 rounded-xl bg-neutral-50 shadow-sm flex flex-col space-y-2 cursor-zoom-in hover:border-neutral-400 transition-colors duration-150 group"
+                  >
+                    <div className="w-full h-40 bg-neutral-200 rounded-lg overflow-hidden relative">
+                      <img src={item.src} alt={item.alt} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-200" />
+                    </div>
+                    <span className="text-xs font-medium text-neutral-500 text-center block pt-1 select-none">
+                      {item.alt}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Minimalist Zoom Pop-up Modal Layer */}
+          <AnimatePresence>
+            {activeImg && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveImg(null)}
+                className="absolute inset-0 bg-white/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 cursor-zoom-out"
+              >
+                <motion.div
+                  initial={{ scale: 0.96, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.96, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  className="max-w-[90%] max-h-[75%] bg-white border border-neutral-200 p-2 rounded-2xl shadow-xl flex flex-col items-center"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img 
+                    src={activeImg.src} 
+                    alt={activeImg.alt} 
+                    className="w-full h-full object-contain rounded-xl max-h-[400px]" 
+                  />
+                </motion.div>
+
+                <motion.div
+                  initial={{ y: 8, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 8, opacity: 0 }}
+                  transition={{ delay: 0.05 }}
+                  className="mt-4 text-center select-none max-w-sm"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <p className="text-sm font-bold text-neutral-900 tracking-tight">{activeImg.alt}</p>
+                  <p className="text-xs font-medium text-neutral-500 mt-0.5">{activeImg.caption}</p>
+                  
+                  <button 
+                    onClick={() => setActiveImg(null)}
+                    className="mt-4 text-xs font-bold text-neutral-500 hover:text-neutral-900 border border-neutral-200 rounded-lg px-3 py-1.5 hover:bg-neutral-50 transition-colors"
+                  >
+                    Close Preview
+                  </button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    })
   },
   {
     id: 'file-5',
-    title: 'Config Data',
-    iconBgColor: 'bg-purple-600',
-    windowContent: <div className="p-6 text-neutral-800 font-medium">⚙️ System parameters and application property values.</div>
+    title: 'Tic-Tac-Toe',
+    iconBgColor: 'bg-gradient-to-tr from-neutral-500 to-neutral-700',
+    isImageIcon: true,
+    iconPath: '/tic-tac-toe.png', // RESTORED
+    windowContent: <TicTacToeGame />
   },
 ];
 
+// RE-ASSEMBLY ARRAYS LAYER
 const ALL_APPS = [...DOCK_APPS, ...INITIAL_DESKTOP_FILES];
 
 // ==========================================
@@ -525,10 +1003,19 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
         left: file.initialX 
       }}
     >
-      <div className={`w-14 h-14 rounded-[13px] shadow-md flex items-center justify-center pointer-events-none select-none text-white font-bold p-2 ${file.iconBgColor}`}>
-        <svg className="w-8 h-8 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
+      {/* Dynamic Icon Canvas Wrapper */}
+      <div className={`w-14 h-14 rounded-[13px] shadow-md flex items-center justify-center pointer-events-none select-none text-white font-bold overflow-hidden ${file.isImageIcon ? 'p-0 bg-transparent' : `p-2 ${file.iconBgColor}`}`}>
+        {file.isImageIcon ? (
+          <img 
+            src={file.iconPath} 
+            alt={file.title} 
+            className="w-full h-full object-cover rounded-[13px]" 
+          />
+        ) : (
+          <svg className="w-8 h-8 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        )}
       </div>
 
       <span 
@@ -650,6 +1137,10 @@ function Dock({ openApps, minimizedApps, toggleApp }) {
       <div className="mx-3 mb-1 h-11 w-[2.5px] bg-white/35 rounded-full shrink-0 self-end" />
 
       <div className="flex items-end pr-1 space-x-2.5">
+        <SocialDockIcon href="https://mail.google.com/mail/?view=cm&fs=1&to=piyushprasad121@gmail.com" title="Gmail" bgColor="bg-[#EA4335]" mouseX={mouseX} target="_blank">
+          <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" /></svg>
+        </SocialDockIcon>
+
         <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
           <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </SocialDockIcon>
@@ -742,6 +1233,179 @@ function SocialDockIcon({ href, title, bgColor, children, mouseX }) {
       >
         <div className="w-full h-full flex items-center justify-center pointer-events-none">{children}</div>
       </motion.a>
+    </div>
+  );
+}
+
+// ==========================================
+// 8. INTERACTIVE TIC-TAC-TOE WINDOW CORE
+// ==========================================
+function TicTacToeGame() {
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [isXNext, setIsXNext] = useState(true);
+  const [gameMode, setGameMode] = useState('cpu'); // 'cpu' or 'pvp'
+  const [isCpuThinking, setIsCpuThinking] = useState(false);
+
+  const calculateWinner = (squares) => {
+    const lines = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+        return { player: squares[a], line: lines[i] };
+      }
+    }
+    return null;
+  };
+
+  const winnerInfo = calculateWinner(board);
+  const winner = winnerInfo ? winnerInfo.player : null;
+  const isDraw = !winner && board.every(square => square !== null);
+
+  // FIXED: Reliable CPU AI turn handling loop
+  useEffect(() => {
+    if (gameMode !== 'cpu' || isXNext || winner || isDraw || isCpuThinking) return;
+
+    setIsCpuThinking(true);
+    
+    const timer = setTimeout(() => {
+      setBoard((currentBoard) => {
+        const emptyIndices = currentBoard.map((val, idx) => val === null ? idx : null).filter(val => val !== null);
+        
+        if (emptyIndices.length === 0) return currentBoard;
+
+        const testMove = (player) => {
+          for (let i = 0; i < emptyIndices.length; i++) {
+            const testBoard = [...currentBoard];
+            testBoard[emptyIndices[i]] = player;
+            if (calculateWinner(testBoard)?.player === player) return emptyIndices[i];
+          }
+          return null;
+        };
+
+        // 1. Attack (Win if possible)
+        let cpuMove = testMove('O');
+        
+        // 2. Defend (Block user's winning move)
+        if (cpuMove === null) {
+          cpuMove = testMove('X');
+        }
+
+        // 3. Take Center Strategy
+        if (cpuMove === null && emptyIndices.includes(4)) {
+          cpuMove = 4;
+        }
+
+        // 4. Fallback to random move
+        if (cpuMove === null) {
+          cpuMove = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+        }
+
+        const nextBoard = [...currentBoard];
+        nextBoard[cpuMove] = 'O';
+        
+        // Explicitly clear thinking state and hand control back to the human player
+        setIsCpuThinking(false);
+        setIsXNext(true);
+        
+        return nextBoard;
+      });
+    }, 500); // Clean 500ms processing delay simulation
+
+    return () => clearTimeout(timer);
+  }, [isXNext, gameMode, winner, isDraw]);
+
+  const handleClick = (index) => {
+    if (board[index] || winner || isCpuThinking || (gameMode === 'cpu' && !isXNext)) return;
+
+    const newBoard = [...board];
+    newBoard[index] = isXNext ? 'X' : 'O';
+    setBoard(newBoard);
+    setIsXNext(!isXNext);
+  };
+
+  const resetGame = () => {
+    setBoard(Array(9).fill(null));
+    setIsXNext(true);
+    setIsCpuThinking(false);
+  };
+
+  return (
+    <div className="h-full w-full bg-white flex flex-col justify-between p-6 font-sans select-none text-neutral-800">
+      
+      {/* Upper Control Strip */}
+      <div className="flex items-center justify-between border border-neutral-200 p-2.5 rounded-2xl shadow-sm shrink-0">
+        <div className="flex space-x-1.5 bg-neutral-100 p-1 rounded-xl">
+          <button 
+            onClick={() => { setGameMode('cpu'); resetGame(); }}
+            className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${gameMode === 'cpu' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
+          >
+            vs Computer
+          </button>
+          <button 
+            onClick={() => { setGameMode('pvp'); resetGame(); }}
+            className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${gameMode === 'pvp' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
+          >
+            Pass & Play
+          </button>
+        </div>
+
+        <div className="text-sm font-bold text-neutral-800 px-2">
+          {winner ? (
+            <span>Winner: {winner}</span>
+          ) : isDraw ? (
+            <span className="text-neutral-500">It is a Draw</span>
+          ) : isCpuThinking ? (
+            <span className="text-neutral-400 animate-pulse">CPU is thinking</span>
+          ) : (
+            <span className="text-neutral-600">Turn: {isXNext ? 'X' : 'O'}</span>
+          )}
+        </div>
+      </div>
+
+      {/* Playfield Canvas Grid Matrix */}
+      <div className="flex-1 flex items-center justify-center my-4">
+        <div className="grid grid-cols-3 gap-3 w-72 h-72">
+          {board.map((square, idx) => {
+            const isWinningSquare = winnerInfo?.line.includes(idx);
+            
+            return (
+              <motion.button
+                key={idx}
+                whileHover={{ scale: square || winner || isCpuThinking ? 1 : 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => handleClick(idx)}
+                className={`w-full h-full rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-sm border transition-all bg-white text-neutral-800 border-neutral-200 hover:border-neutral-300 hover:shadow-md ${
+                  isWinningSquare ? 'ring-2 ring-neutral-800 bg-neutral-100' : ''
+                }`}
+              >
+                {square && (
+                  <motion.span
+                    initial={{ scale: 0.4, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                  >
+                    {square}
+                  </motion.span>
+                )}
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Operational Game Reset Button */}
+      <div className="shrink-0 flex justify-center">
+        <button
+          onClick={resetGame}
+          className="w-full max-w-xs bg-neutral-900 hover:bg-neutral-800 text-white text-sm font-bold py-3 rounded-xl shadow-md transition-all active:scale-[0.99]"
+        >
+          Restart Match
+        </button>
+      </div>
     </div>
   );
 }
