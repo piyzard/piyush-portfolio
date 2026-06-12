@@ -29,15 +29,15 @@ const DOCK_APPS = [
           <div className="flex-1 w-full flex flex-col justify-between py-0.5 space-y-2">
             <div className="flex items-baseline border-b border-neutral-200 pb-2">
               <span className="text-xs font-bold tracking-wider text-neutral-800 uppercase w-24">Name</span>
-              <span className="text-base text-neutral-600 font-semibold">Piyush Prasad</span>
+              <span className="text-base text-neutral-700 font-medium">Piyush Prasad</span>
             </div>
             <div className="flex items-baseline border-b border-neutral-200 pb-2">
               <span className="text-xs font-bold tracking-wider text-neutral-800 uppercase w-24">Position</span>
-              <span className="text-base text-neutral-600 font-semibold">Software Developer</span>
+              <span className="text-base text-neutral-700 font-medium">Software Developer</span>
             </div>
             <div className="flex items-baseline border-b border-neutral-200 pb-2">
               <span className="text-xs font-bold tracking-wider text-neutral-800 uppercase w-24">Mail</span>
-              <a href="mailto:piyushprasad121@gmail.com" className="text-base text-blue-600 font-semibold hover:underline">
+              <a href="mailto:piyushprasad121@gmail.com" className="text-base text-blue-600 font-medium hover:underline">
                 piyushprasad121@gmail.com
               </a>
             </div>
@@ -46,10 +46,10 @@ const DOCK_APPS = [
 
         {/* Bio Box Component */}
         <div className="bg-neutral-100 rounded-xl p-5 space-y-4 border border-neutral-200/40">
-          <p className="text-base leading-relaxed text-neutral-900 font-semibold">
+          <p className="text-base leading-relaxed text-neutral-900 font-bold">
             I'm Piyush Prasad, a Software Developer focused on building scalable web applications and AI-powered solutions.
           </p>
-          <p className="text-base leading-relaxed text-neutral-700">
+          <p className="text-base leading-relaxed text-neutral-700 font-medium">
             For the past 5 years, I've been developing digital products across web, mobile, and data-driven platforms. 
             I specialize in MERN, Python, and SQL, creating everything from intelligent chatbots and Android applications 
             to e-commerce platforms and modern portfolio experiences.
@@ -110,28 +110,28 @@ const DOCK_APPS = [
           content: (
             <div className="space-y-5 text-[15px] text-neutral-800 font-normal leading-[1.6]">
               <div>
-                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Programming Languages</p>
-                <p className="text-neutral-700">JavaScript (ES6+), TypeScript, Python, SQL, Java, C/C++</p>
+                <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">Programming Languages</p>
+                <p className="text-neutral-700 font-medium">JavaScript (ES6+), TypeScript, Python, SQL, Java, C/C++</p>
               </div>
               <div>
-                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Frontend Engineering</p>
-                <p className="text-neutral-700">React.js, Next.js, Vite, HTML5, CSS3, Tailwind CSS, Framer Motion, Responsive Design, Progressive Web Apps (PWA)</p>
+                <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">Frontend Engineering</p>
+                <p className="text-neutral-700 font-medium">React.js, Next.js, Vite, HTML5, CSS3, Tailwind CSS, Framer Motion, Responsive Design, Progressive Web Apps (PWA)</p>
               </div>
               <div>
-                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Backend Engineering</p>
-                <p className="text-neutral-700">Node.js, Express.js, REST APIs, Authentication & Authorization, Firebase, MongoDB, PostgreSQL, MySQL</p>
+                <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">Backend Engineering</p>
+                <p className="text-neutral-700 font-medium">Node.js, Express.js, REST APIs, Authentication & Authorization, Firebase, MongoDB, PostgreSQL, MySQL</p>
               </div>
               <div>
-                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">AI & LLM Development</p>
-                <p className="text-neutral-700">OpenAI API, Claude, Claude Code, Google AI Studio, Gemini API, Cursor AI, GitHub Copilot, Perplexity AI, LangChain, Prompt Engineering, Retrieval-Augmented Generation (RAG), AI Agents, Workflow Automation</p>
+                <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">AI & LLM Development</p>
+                <p className="text-neutral-700 font-medium">OpenAI API, Claude, Claude Code, Google AI Studio, Gemini API, Cursor AI, GitHub Copilot, Perplexity AI, LangChain, Prompt Engineering, Retrieval-Augmented Generation (RAG), AI Agents, Workflow Automation</p>
               </div>
               <div>
-                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Data & Analytics</p>
-                <p className="text-neutral-700">Python, NumPy, Pandas, SQL Analytics, Data Visualization, ETL Pipelines, Business Intelligence</p>
+                <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">Data & Analytics</p>
+                <p className="text-neutral-700 font-medium">Python, NumPy, Pandas, SQL Analytics, Data Visualization, ETL Pipelines, Business Intelligence</p>
               </div>
               <div>
-                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Cloud & DevOps</p>
-                <p className="text-neutral-700">Git, GitHub, Linux, Docker, Vercel, Netlify, CI/CD, MongoDB Atlas, Postman</p>
+                <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">Cloud & DevOps</p>
+                <p className="text-neutral-700 font-medium">Git, GitHub, Linux, Docker, Vercel, Netlify, CI/CD, MongoDB Atlas, Postman</p>
               </div>
             </div>
           )
@@ -145,42 +145,42 @@ const DOCK_APPS = [
               {/* Role 1: Flipkart */}
               <div className="space-y-1">
                 <p className="font-bold text-neutral-900 text-lg">Customer Support Associate</p>
-                <p className="font-medium text-base text-neutral-800">Flipkart</p>
+                <p className="font-medium text-base text-neutral-800">Flipkart (Teleperformance)</p>
                 <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
                   Bangalore (Aug. 2025 – Nov. 2025)
                 </p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Resolved 10K+ customer inquiries and escalations weekly across multiple communication channels, maintaining high customer satisfaction through effective communication, active listening, and problem-solving skills.</li>
                   <li>Collaborated with cross-functional operations, logistics, and support teams to streamline issue resolution processes, reducing average turnaround times by 25%.</li>
                   <li>Leveraged AI-powered productivity tools and knowledge management systems to improve response efficiency, while strengthening leadership, negotiation, stakeholder management, and conflict-resolution abilities.</li>
                 </ul>
               </div>
 
-              {/* Role 2: DevRhylme Foundation */}
-              <div className="space-y-1">
-                <p className="font-bold text-neutral-900 text-lg">Software Engineer Intern</p>
-                <p className="font-medium text-base text-neutral-800">DevRhylme Foundation</p>
-                <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
-                  Kolkata (Jan. 2025 – Jun. 2025)
-                </p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
-                  <li>Developed AI and machine learning solutions using Python, automating data processing workflows and reducing manual effort by over 40% while improving overall system performance.</li>
-                  <li>Utilized modern AI development tools, LLM-powered workflows, and data analytics techniques to accelerate prototyping, debugging, and software delivery across multiple projects.</li>
-                  <li>Collaborated with multidisciplinary teams to deliver scalable software solutions, demonstrating technical leadership, project ownership, mentoring, and effective cross-functional communication.</li>
-                </ul>
-              </div>
-
-              {/* Role 3: The Portrait Gallery */}
+              {/* Role 2: The Portrait Gallery */}
               <div className="space-y-1">
                 <p className="font-bold text-neutral-900 text-lg">Software Engineer</p>
                 <p className="font-medium text-base text-neutral-800">The Portrait Gallery</p>
                 <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
                   Kolkata (Sep. 2024 – Aug. 2025)
                 </p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Designed and developed a high-performance business website that increased user engagement by 30% and contributed to a 25% growth in customer conversions.</li>
                   <li>Built responsive web applications using modern frontend technologies, optimized SEO, and implemented analytics-driven improvements to enhance user experience and website performance.</li>
                   <li>Managed project delivery from concept to deployment while coordinating with stakeholders, strengthening skills in client communication, leadership, project management, and strategic problem-solving.</li>
+                </ul>
+              </div>
+
+              {/* Role 3: DevRhylme Foundation */}
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Software Engineer Intern</p>
+                <p className="font-medium text-base text-neutral-800">DevRhylme Foundation</p>
+                <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
+                  Kolkata (Jan. 2025 – Jun. 2025)
+                </p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
+                  <li>Developed AI and machine learning solutions using Python, automating data processing workflows and reducing manual effort by over 40% while improving overall system performance.</li>
+                  <li>Utilized modern AI development tools, LLM-powered workflows, and data analytics techniques to accelerate prototyping, debugging, and software delivery across multiple projects.</li>
+                  <li>Collaborated with multidisciplinary teams to deliver scalable software solutions, demonstrating technical leadership, project ownership, mentoring, and effective cross-functional communication.</li>
                 </ul>
               </div>
 
@@ -191,7 +191,7 @@ const DOCK_APPS = [
                 <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
                   Kolkata (Jan. 2025 – Mar. 2025)
                 </p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Contributed to multiple open-source software projects, implementing frontend enhancements, API integrations, and performance optimizations that improved project efficiency by 35%.</li>
                   <li>Collaborated with distributed development teams using Git, GitHub, code reviews, and Agile development practices to deliver production-ready features.</li>
                   <li>Leveraged AI-assisted development tools to accelerate debugging, documentation, and feature implementation while enhancing teamwork, technical communication, and software engineering best practices.</li>
@@ -207,36 +207,36 @@ const DOCK_APPS = [
           content: (
             <div className="space-y-6 text-[15px] text-neutral-800 font-normal leading-[1.6]">
               {/* Project 1 */}
-              <div className="space-y-1.5">
-                <p className="font-bold text-neutral-900 text-base">MERN AI Chatbot</p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">MERN AI Chatbot</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Developed a full-stack AI chatbot application using the MERN stack, TypeScript, and OpenAI APIs, featuring JWT authentication, session management, and role-based access control.</li>
                   <li>Designed scalable backend architecture with MongoDB database integration, secure REST APIs, and real-time conversation storage for seamless user interactions.</li>
                 </ul>
               </div>
 
               {/* Project 2 */}
-              <div className="space-y-1.5">
-                <p className="font-bold text-neutral-900 text-base">Warranty Vault</p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Warranty Vault</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Built an AI-powered Android application that automates receipt scanning and extracts billing and warranty information using intelligent document processing techniques.</li>
                   <li>Implemented Room Database for secure local data storage and background notification services to proactively track warranty expiration timelines.</li>
                 </ul>
               </div>
 
               {/* Project 3 */}
-              <div className="space-y-1.5">
-                <p className="font-bold text-neutral-900 text-base">Bacola Shopping</p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Bacola Shopping</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Engineered a scalable e-commerce application using React, Tailwind CSS, Firebase, and Stripe, enabling secure authentication, payment processing, and product management.</li>
                   <li>Developed responsive user interfaces and optimized application performance through modern frontend architecture, API integration, and state management practices.</li>
                 </ul>
               </div>
 
               {/* Project 4 */}
-              <div className="space-y-1.5">
-                <p className="font-bold text-neutral-900 text-base">Personal Portfolio</p>
-                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Personal Portfolio</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700 pt-1.5 font-medium">
                   <li>Designed and developed a high-performance portfolio website using React, Vite, Tailwind CSS, and Framer Motion, showcasing projects, technical expertise, and professional achievements.[cite: 2]</li>
                   <li>Implemented responsive design principles, SEO optimization, and interactive UI animations to enhance user engagement and improve overall web performance.</li>
                 </ul>
@@ -250,7 +250,7 @@ const DOCK_APPS = [
           previewText: "Advanced Prompt Engineering...",
           content: (
             <div className="space-y-4 text-[15px] text-neutral-800 font-normal leading-[1.6]">
-              <ul className="list-disc list-outside pl-5 space-y-2 text-neutral-900 font-medium">
+              <ul className="list-disc list-outside pl-5 space-y-2 text-neutral-700 font-medium">
                 <li>Advanced Prompt Engineering & LLM Applications</li>
                 <li>AI Agent Development & Workflow Automation</li>
                 <li>Full Stack Web Development</li>
@@ -266,13 +266,13 @@ const DOCK_APPS = [
           date: "April 30, 2026 at 04:10 PM",
           previewText: "Bachelor of Science...",
           content: (
-            <div className="space-y-4 text-[15px] text-neutral-800 font-normal leading-[1.6]">
+            <div className="space-y-6 text-[15px] text-neutral-800 font-normal leading-[1.6]">
               <div className="space-y-1">
                 <p className="font-bold text-neutral-900 text-lg">Bachelor of Science in Computer Science</p>
-                <p className="text-neutral-800 font-medium text-base">University of Calcutta</p>
+                <p className="text-neutral-700 font-medium text-base">University of Calcutta</p>
                 
-                <div className="pt-3">
-                  <p className="font-bold text-neutral-900 text-sm tracking-wide uppercase border-b border-neutral-100 pb-1 mb-2">Relevant Areas</p>
+                <div className="pt-4">
+                  <p className="font-bold text-neutral-900 text-lg border-b border-neutral-100 pb-0.5 mb-1.5">Relevant Areas</p>
                   <p className="text-neutral-700 font-medium">
                     Data Structures & Algorithms • Database Systems • Software Engineering • Operating Systems • Computer Networks • Artificial Intelligence
                   </p>
