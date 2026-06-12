@@ -12,12 +12,75 @@ const DOCK_APPS = [
     isImageIcon: true,
     iconContent: <img src="/bitmoji.png" alt="Avatar" className="w-full h-full object-cover rounded-[12px]" />,
     windowContent: (
-      <div className="p-6 text-neutral-800 space-y-4 select-text">
-        <h2 className="text-2xl font-bold">Hello, World! 👋</h2>
-        <p className="text-sm leading-relaxed">
-          Welcome to my interactive macOS portfolio desktop. This window is draggable, resizable, and closable!
-        </p>
-        <p className="text-sm text-neutral-500">You can easily replace this content in the DOCK_APPS config.</p>
+      <div className="p-6 text-neutral-800 space-y-6 select-text font-sans pb-4">
+        {/* Title */}
+        <h2 className="text-4xl font-bold tracking-tight text-neutral-900">About me</h2>
+        
+        {/* Top Profile Section */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:space-x-6 space-y-4 sm:space-y-0">
+          {/* Your personalized image asset wrapper */}
+          <img 
+            src="/piyush-prasad.jpg" 
+            alt="Piyush Prasad" 
+            className="w-32 h-36 rounded-2xl object-cover shadow-sm flex-shrink-0" 
+          />
+          
+          {/* Profile Meta Fields */}
+          <div className="flex-1 w-full flex flex-col justify-between py-0.5 space-y-2">
+            <div className="flex items-baseline border-b border-neutral-200 pb-2">
+              <span className="text-xs font-bold tracking-wider text-neutral-800 uppercase w-24">Name</span>
+              <span className="text-base text-neutral-600 font-semibold">Piyush Prasad</span>
+            </div>
+            <div className="flex items-baseline border-b border-neutral-200 pb-2">
+              <span className="text-xs font-bold tracking-wider text-neutral-800 uppercase w-24">Position</span>
+              <span className="text-base text-neutral-600 font-semibold">Software Developer</span>
+            </div>
+            <div className="flex items-baseline border-b border-neutral-200 pb-2">
+              <span className="text-xs font-bold tracking-wider text-neutral-800 uppercase w-24">Mail</span>
+              <a href="mailto:piyushprasad121@gmail.com" className="text-base text-blue-600 font-semibold hover:underline">
+                piyushprasad121@gmail.com
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bio Box Component */}
+        <div className="bg-neutral-100 rounded-xl p-5 space-y-4 border border-neutral-200/40">
+          <p className="text-base leading-relaxed text-neutral-900 font-semibold">
+            I'm Piyush Prasad, a Software Developer focused on building scalable web applications and AI-powered solutions.
+          </p>
+          <p className="text-base leading-relaxed text-neutral-700">
+            For the past 5 years, I've been developing digital products across web, mobile, and data-driven platforms. 
+            I specialize in MERN, Python, and SQL, creating everything from intelligent chatbots and Android applications 
+            to e-commerce platforms and modern portfolio experiences.
+          </p>
+        </div>
+
+        {/* Location Section */}
+        <div className="space-y-4 pt-2">
+          <h3 className="text-xl font-bold text-neutral-900 tracking-tight">Location</h3>
+          
+          {/* Wrapper for Interactive Maps Viewport Layer */}
+          <div className="relative w-full h-64 bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group">
+            <iframe
+              title="Kolkata Location Map"
+              src="https://maps.google.com/maps?q=Kolkata&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              className="absolute inset-0 w-full h-full border-0 z-10 pointer-events-auto"
+              allowFullScreen=""
+              loading="lazy"
+            />
+          </div>
+          
+          {/* Action Footer Row */}
+          <div className="flex justify-end pt-1">
+            <a 
+              href="mailto:piyushprasad121@gmail.com"
+              className="bg-neutral-200/80 hover:bg-neutral-200 text-neutral-800 text-sm font-bold px-5 py-2.5 rounded-xl border border-neutral-300/40 shadow-sm transition-all pointer-events-auto"
+            >
+              Contact me
+            </a>
+          </div>
+        </div>
       </div>
     )
   },
@@ -39,7 +102,7 @@ const DOCK_APPS = [
     ),
     windowContent: (
       <div className="p-4 h-full bg-[#FFFBEA] text-neutral-800 font-sans border-t border-neutral-200/50 select-text">
-        <div className="w-full h-full text-sm leading-6 whitespace-pre-wrap">
+        <div className="w-full h-full text-base leading-7 whitespace-pre-wrap">
           ✏️ macOS Notes App clone.{"\n"}{"\n"}
           - This content is now completely read-only on the live site.{"\n"}
           - Smooth Framer Motion transitions.{"\n"}
@@ -99,29 +162,26 @@ function App() {
   const [activeApp, setActiveApp] = useState(null);
   const [desktopFiles, setDesktopFiles] = useState([]);
   const [selectedFileId, setSelectedFileId] = useState(null);
+  const [spawnOrder, setSpawnOrder] = useState([]);
 
-  // Grid-based random positioning to avoid overlays
   useEffect(() => {
     const columns = 5;
     const rows = 3;
     const slots = [];
     
-    // Generate grid coordinates
     for (let c = 0; c < columns; c++) {
       for (let r = 0; r < rows; r++) {
         slots.push({ col: c, row: r });
       }
     }
 
-    // Shuffle grid slots
     const shuffledSlots = slots.sort(() => Math.random() - 0.5);
 
     const randomized = INITIAL_DESKTOP_FILES.map((file, index) => {
       const slot = shuffledSlots[index % shuffledSlots.length];
       
-      // Calculate position based on grid block + tiny random jitter within its zone
-      const baseX = 8 + slot.col * 16; // column spread
-      const baseY = 8 + slot.row * 22; // row spread
+      const baseX = 8 + slot.col * 16; 
+      const baseY = 8 + slot.row * 22; 
       const jitterX = Math.floor(Math.random() * 4) - 2; 
       const jitterY = Math.floor(Math.random() * 4) - 2;
 
@@ -135,12 +195,22 @@ function App() {
   }, []);
 
   const toggleApp = (id) => {
-    setOpenApps(prev => ({ ...prev, [id]: true }));
+    setOpenApps(prev => {
+      const isOpening = !prev[id];
+      if (isOpening) {
+        setSpawnOrder(old => old.includes(id) ? old : [...old, id]);
+      }
+      return { ...prev, [id]: true };
+    });
     setMinimizedApps(prev => ({ ...prev, [id]: false }));
     setActiveApp(id);
   };
 
-  // Clear file selection when clicking on empty desktop space
+  const handleCloseApp = (id) => {
+    setOpenApps(prev => ({ ...prev, [id]: false }));
+    setSpawnOrder(old => old.filter(appId => appId !== id));
+  };
+
   const handleDesktopClick = (e) => {
     if (e.target === desktopRef.current || e.target.classList.contains('desktop-workspace-layer')) {
       setSelectedFileId(null);
@@ -157,7 +227,6 @@ function App() {
       }}
     >
       {/* DESKTOP WORKSPACE LAYER */}
-      {/* Add the "desktop-workspace-layer" class to this div */}
       <div className="desktop-workspace-layer absolute inset-0 z-10 w-full h-full">
         {desktopFiles.map(file => (
           <DesktopGridIcon 
@@ -172,20 +241,26 @@ function App() {
 
       {/* WINDOWS LAYER */}
       <div className="absolute inset-0 z-20 pointer-events-none">
-        {ALL_APPS.map(app => (
-          <AnimatePresence key={app.id}>
-            {openApps[app.id] && !minimizedApps[app.id] && (
-              <DesktopWindow
-                app={app}
-                desktopRef={desktopRef}
-                isActive={activeApp === app.id}
-                onFocus={() => setActiveApp(app.id)}
-                onClose={() => setOpenApps(prev => ({ ...prev, [app.id]: false }))}
-                onMinimize={() => setMinimizedApps(prev => ({ ...prev, [app.id]: true }))}
-              />
-            )}
-          </AnimatePresence>
-        ))}
+        {ALL_APPS.map(app => {
+          const orderIndex = spawnOrder.indexOf(app.id);
+          const cascadeOffset = orderIndex > 0 ? orderIndex * 28 : 0;
+
+          return (
+            <AnimatePresence key={app.id}>
+              {openApps[app.id] && !minimizedApps[app.id] && (
+                <DesktopWindow
+                  app={app}
+                  desktopRef={desktopRef}
+                  isActive={activeApp === app.id}
+                  cascadeOffset={cascadeOffset}
+                  onFocus={() => setActiveApp(app.id)}
+                  onClose={() => handleCloseApp(app.id)}
+                  onMinimize={() => setMinimizedApps(prev => ({ ...prev, [app.id]: true }))}
+                />
+              )}
+            </AnimatePresence>
+          );
+        })}
       </div>
 
       {/* THE FLUID DOCK */}
@@ -207,34 +282,28 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
       drag
       dragElastic={0}
       dragMomentum={false}
-      // Add whileDrag to make it visually clear that the element is active
       whileDrag={{ scale: 1.05 }}
       onPointerDown={(e) => {
-        // Stop event propagation to prevent background desktop clicks from deselecting it
         e.stopPropagation();
         onSelect();
       }}
       onDoubleClick={onDoubleClick}
       onTouchEnd={onDoubleClick}
-      // REMOVED absolute position from tailwind classes string so motion styles can handle coordinate injection
       className={`pointer-events-auto flex flex-col items-center justify-start w-24 p-2 rounded-xl cursor-grab active:cursor-grabbing group transition-colors duration-200 ${
         isSelected ? 'bg-white/15 border-white/20 shadow-sm' : 'hover:bg-white/10 border-transparent hover:border-white/10'
       } border`}
-      // Set the initial positions explicitly in inline styles so drag values don't conflict with layout strings
       style={{ 
         position: 'absolute',
         top: file.initialY, 
         left: file.initialX 
       }}
     >
-      {/* Icon Wrapper */}
       <div className={`w-14 h-14 rounded-[13px] shadow-md flex items-center justify-center pointer-events-none select-none text-white font-bold p-2 ${file.iconBgColor}`}>
         <svg className="w-8 h-8 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       </div>
 
-      {/* Premium, High-Contrast Text Element */}
       <span 
         className={`mt-2 text-[11px] text-white font-semibold text-center select-none break-words w-full tracking-wide transition-all duration-150 px-1.5 py-0.5 rounded-[4px] ${
           isSelected 
@@ -242,9 +311,8 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
             : 'line-clamp-2 group-hover:bg-black/40 group-hover:backdrop-blur-md'
         }`}
         style={{
-          // Multi-layered shadow: sharp dark outline + soft spread blur for ultimate readability
           textShadow: isSelected 
-            ? 'none' // Disable shadow when blue background capsule is active
+            ? 'none' 
             : '0px 1px 2px rgba(0,0,0,0.9), 0px 2px 4px rgba(0,0,0,0.7), 0px 0px 8px rgba(0,0,0,0)'
         }}
       >
@@ -257,49 +325,67 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
 // ==========================================
 // 5. MACOS-STYLE WINDOW COMPONENT
 // ==========================================
-function DesktopWindow({ app, desktopRef, isActive, onFocus, onClose, onMinimize }) {
+function DesktopWindow({ app, desktopRef, isActive, cascadeOffset, onFocus, onClose, onMinimize }) {
+  const width = 600;
+  const height = 560;
+
   return (
     <motion.div
-      initial={{ scale: 0.8, opacity: 0, x: 100, y: 100 }}
-      animate={{ 
-        scale: 1, 
-        opacity: 1,
-        width: '540px',
-        height: '380px',
-      }}
-      exit={{ scale: 0.8, opacity: 0 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+      initial={{ scale: 0.93, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.93, opacity: 0 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       drag
       dragHandleClassName="window-drag-handle"
       dragConstraints={desktopRef}
-      dragElastic={0.05}
+      dragElastic={0}
       dragMomentum={false}
       onPointerDown={onFocus}
-      className={`pointer-events-auto absolute flex flex-col bg-white/80 backdrop-blur-2xl border rounded-xl overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.35)] ${
+      className={`pointer-events-auto absolute flex flex-col bg-white/95 backdrop-blur-2xl border rounded-xl overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.35)] ${
         isActive ? 'z-40 border-black/20 ring-1 ring-black/5' : 'z-30 border-neutral-300/40 opacity-95'
       }`}
       style={{
-        top: '15%',
-        left: '25%',
+        width: `${width}px`,
+        height: `${height}px`,
+        top: `20%`,
+        left: `30%`,
+        marginTop: `${cascadeOffset}px`,
+        marginLeft: `${cascadeOffset}px`
       }}
     >
-      <div className="window-drag-handle flex items-center justify-between px-4 h-11 bg-neutral-200/40 border-b border-neutral-300/30 select-none cursor-default">
-        <div className="flex items-center space-x-2 w-1/4">
+      {/* App Window Header Bar */}
+      <div className="window-drag-handle flex items-center justify-between px-4 h-14 bg-neutral-200/40 border-b border-neutral-300/30 select-none cursor-grab active:cursor-grabbing shrink-0">
+        
+        {/* Button Section Container - Locked to exact button dimensions */}
+        <div 
+          className="flex items-center space-x-2 h-full cursor-pointer shrink-0"
+          style={{ width: '58px' }} // Exact pixel boundary box matching the three dots
+          onPointerDown={(e) => {
+            // Blocks drag state initialization exclusively over the controls
+            e.stopPropagation();
+          }}
+        >
           <button 
             onClick={(e) => { e.stopPropagation(); onClose(); }} 
-            className="w-3.5 h-3.5 rounded-full bg-[#FF5F56] border border-[#E0443E] focus:outline-none transition-colors"
+            className="w-3.5 h-3.5 rounded-full bg-[#FF5F56] border border-[#E0443E] focus:outline-none transition-colors cursor-pointer"
           />
           <button 
             onClick={(e) => { e.stopPropagation(); onMinimize(); }} 
-            className="w-3.5 h-3.5 rounded-full bg-[#FFBD2E] border border-[#DEA123] focus:outline-none transition-colors"
+            className="w-3.5 h-3.5 rounded-full bg-[#FFBD2E] border border-[#DEA123] focus:outline-none transition-colors cursor-pointer"
           />
-          <div className="w-3.5 h-3.5 rounded-full bg-[#27C93F] border border-[#1AAA29]" />
+          <button 
+            onClick={(e) => e.stopPropagation()}
+            className="w-3.5 h-3.5 rounded-full bg-[#27C93F] border border-[#1AAA29] focus:outline-none cursor-pointer"
+          />
         </div>
 
-        <div className="text-sm font-semibold text-neutral-700 text-center w-2/4 truncate">
+        {/* Centered Title Heading */}
+        <div className="text-base font-bold text-neutral-700 text-center flex-1 truncate tracking-wide pointer-events-none px-2">
           {app.title}
         </div>
-        <div className="w-1/4" />
+        
+        {/* Asymmetrical balancing spacer matching the 58px button container size */}
+        <div style={{ width: '58px' }} className="shrink-0" />
       </div>
 
       <div className="flex-1 overflow-auto pointer-events-auto">
@@ -319,7 +405,6 @@ function Dock({ openApps, minimizedApps, toggleApp }) {
     <motion.div
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
-      // Scaled up Dock overall height slightly to account for larger contents
       className="absolute bottom-8 left-1/2 transform -translate-x-1/2 h-[80px] bg-white/[0.06] backdrop-blur-3xl backdrop-saturate-150 border border-white/20 rounded-[24px] flex items-end px-3 pb-3.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] z-50 transition-all duration-100"
     >
       <div className="flex items-end pl-1 space-x-2.5">
@@ -366,7 +451,6 @@ function DockIcon({ app, mouseX, isOpen, isMinimized, onClick }) {
     return val - bounds.x - bounds.width / 2;
   });
 
-  // Scaled Dock items slightly up (Base: 50px, Peak Hover: 76px)
   const sizeTransform = useTransform(distance, [-120, 0, 120], [50, 76, 50]);
   const size = useSpring(sizeTransform, { mass: 0.1, stiffness: 220, damping: 16 });
 
@@ -406,7 +490,6 @@ function SocialDockIcon({ href, title, bgColor, children, mouseX }) {
     return val - bounds.x - bounds.width / 2;
   });
 
-  // Balanced scaling layout for standard social layout nodes
   const sizeTransform = useTransform(distance, [-120, 0, 120], [50, 76, 50]);
   const size = useSpring(sizeTransform, { mass: 0.1, stiffness: 220, damping: 16 });
 
@@ -420,7 +503,16 @@ function SocialDockIcon({ href, title, bgColor, children, mouseX }) {
         )}
       </AnimatePresence>
 
-      <motion.a ref={ref} href={href} target="_blank" rel="noopener noreferrer" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{ width: size, height: size }} className={`rounded-[15px] text-white flex items-center justify-center cursor-pointer shadow-md origin-bottom select-none p-2.5 ${bgColor}`}>
+      <motion.a 
+        ref={ref} 
+        href={href} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        onMouseEnter={() => setIsHovered(true)} // FIXED: Correct arrow function syntax wrapper
+        onMouseLeave={() => setIsHovered(false)} 
+        style={{ width: size, height: size }} 
+        className={`rounded-[15px] text-white flex items-center justify-center cursor-pointer shadow-md origin-bottom select-none p-2.5 ${bgColor}`}
+      >
         <div className="w-full h-full flex items-center justify-center pointer-events-none">{children}</div>
       </motion.a>
     </div>
