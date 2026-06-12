@@ -101,7 +101,7 @@ const DOCK_APPS = [
       </div>
     ),
     windowContent: React.createElement(() => {
-      // 1. UPDATED RESUME DATA STRUCTURE (EASY TO EDIT)
+      // 1. ALL ORIGINAL RESUME DATA RESTORED
       const NOTES_DATA = {
         skills: {
           title: "Skills",
@@ -284,55 +284,81 @@ const DOCK_APPS = [
       };
 
       const [activeTab, setActiveTab] = useState('skills');
+      const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
+      useEffect(() => {
+        if (isMobile) setIsSidebarOpen(false);
+      }, [isMobile]);
 
       return (
-        <div className="flex h-full bg-white text-neutral-800 font-sans select-text border-t border-neutral-200/40">
+        <div className="flex h-full bg-white text-neutral-800 font-sans select-text border-t border-neutral-200/40 relative overflow-hidden">
           
-          {/* LEFT SIDEBAR: Notes Navigation List (Matches image_a1ed1c.png & image_a1ecc3.png styles) */}
-          <div className="w-[32%] bg-[#F9F9F9] border-r border-neutral-200/60 p-2.5 flex flex-col space-y-1 shrink-0 select-none overflow-y-auto">
+          {/* MOBILE TOGGLE OVERLAY FAB FLOATER BUTTON */}
+          {isMobile && (
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="absolute bottom-4 right-4 z-50 bg-[#FCE285] hover:bg-[#FADB6A] text-neutral-900 font-bold px-4 py-2.5 rounded-full shadow-lg flex items-center space-x-2 text-xs transition-all active:scale-95 border border-[#E1C24A]/40"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span>{isSidebarOpen ? "Hide Index" : "Browse Notes"}</span>
+            </button>
+          )}
+
+          {/* LEFT SIDEBAR PANEL LAYER */}
+          <div 
+            className={`bg-[#F9F9F9] border-r border-neutral-200/60 p-2.5 flex flex-col space-y-1 shrink-0 select-none overflow-y-auto transition-all duration-300 ease-in-out z-30 ${
+              isMobile 
+                ? `absolute inset-y-0 left-0 w-[75%] h-full shadow-2xl transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}` 
+                : 'w-[32%] relative transform-none'
+            }`}
+          >
+            {/* Header Area: Collapse Button safely removed */}
+            <div className="text-xs font-bold text-neutral-400 uppercase tracking-wider px-3 pt-2.5 pb-2 border-b border-neutral-200/40 mb-1">
+              <span>Categories</span>
+            </div>
+
             {Object.keys(NOTES_DATA).map((key) => {
               const item = NOTES_DATA[key];
               const isSelected = activeTab === key;
-              
-              // Extract just the short date string (DD/MM/YYYY) for the small list row indicator
-              const displayDate = key === 'skills' ? '12/06/2026' : 
-                                  key === 'experience' ? '05/06/2026' : 
-                                  key === 'projects' ? '28/05/2026' : 
-                                  key === 'certifications' ? '14/05/2026' : '30/04/2026';
+              const displayDate = key === 'skills' ? '12/06/2026' : key === 'experience' ? '05/06/2026' : key === 'projects' ? '28/05/2026' : key === 'certifications' ? '14/05/2026' : '30/04/2026';
 
               return (
                 <button
                   key={key}
-                  onClick={() => setActiveTab(key)}
+                  onClick={() => {
+                    setActiveTab(key);
+                    if (isMobile) setIsSidebarOpen(false);
+                  }}
                   className={`w-full text-left p-3 rounded-xl transition-all duration-150 focus:outline-none ${
-                    isSelected
-                      ? 'bg-[#FCE285] text-neutral-900 shadow-sm'
-                      : 'hover:bg-neutral-200/40 text-neutral-700'
+                    isSelected ? 'bg-[#FCE285] text-neutral-900 shadow-sm' : 'hover:bg-neutral-200/40 text-neutral-700'
                   }`}
                 >
                   <p className="font-bold text-sm tracking-tight truncate">{item.title}</p>
                   <div className={`text-xs mt-0.5 font-medium flex items-baseline space-x-1 ${isSelected ? 'text-neutral-700' : 'text-neutral-500'}`}>
                     <span className="shrink-0">{displayDate}</span>
-                    <span className={`block font-normal truncate flex-1 ${isSelected ? 'text-neutral-600' : 'text-neutral-400'}`}>
-                      {item.previewText}
-                    </span>
+                    <span className="block font-normal truncate flex-1 opacity-80">{item.previewText}</span>
                   </div>
                 </button>
               );
             })}
           </div>
 
-          {/* RIGHT VIEWPORT: Note Content Canvas View */}
-          <div className="flex-1 bg-white overflow-y-auto px-10 py-6 space-y-5">
+          {/* RIGHT VIEWPORT CONTENT CANVAS */}
+          <div className="flex-1 bg-white overflow-y-auto px-5 sm:px-10 py-6 space-y-5">
             <div className="text-center select-none pt-1">
               <span className="text-xs font-medium text-neutral-400 tracking-wide">{NOTES_DATA[activeTab].date}</span>
             </div>
 
-            <h1 className="text-[32px] font-extrabold tracking-tight text-neutral-900 pt-1">
+            <h1 className="text-2xl sm:text-[32px] font-extrabold tracking-tight text-neutral-900 pt-1">
               {NOTES_DATA[activeTab].title}
             </h1>
 
-            {NOTES_DATA[activeTab].content}
+            <div className="pb-12">
+              {NOTES_DATA[activeTab].content}
+            </div>
           </div>
         </div>
       );
@@ -870,33 +896,64 @@ function App() {
   const [spawnOrder, setSpawnOrder] = useState([]);
 
   useEffect(() => {
-    const columns = 5;
-    const rows = 3;
-    const slots = [];
-    
-    for (let c = 0; c < columns; c++) {
-      for (let r = 0; r < rows; r++) {
-        slots.push({ col: c, row: r });
-      }
-    }
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
 
-    const shuffledSlots = slots.sort(() => Math.random() - 0.5);
+    // Grid coordinates updated to accommodate 7 icons neatly on mobile home screen
+    const mobileGridSlots = [
+      { col: 0, row: 0, jitterX: 0, jitterY: 0 }, // About Me
+      { col: 1, row: 0, jitterX: 0, jitterY: 0 }, // Notes
+      { col: 2, row: 0, jitterX: 0, jitterY: 0 }, // MERN AI Chatbot
+      { col: 3, row: 0, jitterX: 0, jitterY: 0 }, // Warranty Vault
+      { col: 0, row: 1, jitterX: 0, jitterY: 0 }, // The Portrait Gallery
+      { col: 1, row: 1, jitterX: 0, jitterY: 0 }, // Bacola Shopping
+      { col: 2, row: 1, jitterX: 0, jitterY: 0 }, // Tic-Tac-Toe
+    ];
 
-    const randomized = INITIAL_DESKTOP_FILES.map((file, index) => {
-      const slot = shuffledSlots[index % shuffledSlots.length];
+    const staticRandomSlots = [
+      { col: 1, row: 0, jitterX: 1,  jitterY: -1 },
+      { col: 3, row: 1, jitterX: -2, jitterY: 2  },
+      { col: 0, row: 2, jitterX: 2,  jitterY: 1  },
+      { col: 4, row: 0, jitterX: -1, jitterY: -2 },
+      { col: 2, row: 2, jitterX: 0,  jitterY: 2  },
+    ];
+
+    // On mobile, prepend the Dock Apps to the desktop list files configuration array
+    const mobileFilesList = [
+      {
+        id: 'about-me',
+        title: 'About Me',
+        isImageIcon: true,
+        iconPath: '/bitmoji.png',
+      },
+      {
+        id: 'notes',
+        title: 'Notes',
+        isImageIcon: false,
+        iconBgColor: 'bg-gradient-to-b from-[#FBF3D5] to-[#F5DF8D]',
+        // Simple document vector fallback for home screen notes icon grid format
+        iconPath: null, 
+      },
+      ...INITIAL_DESKTOP_FILES
+    ];
+
+    const targetFiles = isMobile ? mobileFilesList : INITIAL_DESKTOP_FILES;
+    const slotsToUse = isMobile ? mobileGridSlots : staticRandomSlots;
+
+    const staticAllocatedFiles = targetFiles.map((file, index) => {
+      const slot = slotsToUse[index % slotsToUse.length];
       
-      const baseX = 8 + slot.col * 16; 
-      const baseY = 8 + slot.row * 22; 
-      const jitterX = Math.floor(Math.random() * 4) - 2; 
-      const jitterY = Math.floor(Math.random() * 4) - 2;
+      // Tightened columns and rows to perfectly fit larger icons on mobile screen
+      const baseX = isMobile ? (6 + slot.col * 24) : (8 + slot.col * 16); 
+      const baseY = isMobile ? (6 + slot.row * 15) : (8 + slot.row * 22); 
 
       return {
         ...file,
-        initialX: `${baseX + jitterX}%`,
-        initialY: `${baseY + jitterY}%`,
+        initialX: `${baseX + slot.jitterX}%`,
+        initialY: `${baseY + slot.jitterY}%`,
       };
     });
-    setDesktopFiles(randomized);
+    
+    setDesktopFiles(staticAllocatedFiles);
   }, []);
 
   const toggleApp = (id) => {
@@ -978,13 +1035,15 @@ function App() {
   );
 }
 
-// ==========================================
+/// ==========================================
 // 4. DESKTOP GRID ICON COMPONENT
 // ==========================================
 function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
   return (
     <motion.div 
-      drag
+      drag={!isMobile} // Disable dragging completely on mobile viewports
       dragElastic={0}
       dragMomentum={false}
       whileDrag={{ scale: 1.05 }}
@@ -992,9 +1051,10 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
         e.stopPropagation();
         onSelect();
       }}
+      // Combine double click and single tap mechanics to ensure smooth mobile execution
+      onClick={() => { if (isMobile) onDoubleClick(); }}
       onDoubleClick={onDoubleClick}
-      onTouchEnd={onDoubleClick}
-      className={`pointer-events-auto flex flex-col items-center justify-start w-24 p-2 rounded-xl cursor-grab active:cursor-grabbing group transition-colors duration-200 ${
+      className={`pointer-events-auto flex flex-col items-center justify-start w-[76px] sm:w-24 p-1 sm:p-2 rounded-xl cursor-grab active:cursor-grabbing group transition-colors duration-200 ${
         isSelected ? 'bg-white/15 border-white/20 shadow-sm' : 'hover:bg-white/10 border-transparent hover:border-white/10'
       } border`}
       style={{ 
@@ -1003,23 +1063,23 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
         left: file.initialX 
       }}
     >
-      {/* Dynamic Icon Canvas Wrapper */}
-      <div className={`w-14 h-14 rounded-[13px] shadow-md flex items-center justify-center pointer-events-none select-none text-white font-bold overflow-hidden ${file.isImageIcon ? 'p-0 bg-transparent' : `p-2 ${file.iconBgColor}`}`}>
+      {/* UPSCALED TO w-14 ON MOBILE -> RESTORED BACK TO w-14 ON DESKTOP OVERRIDE */}
+      <div className={`w-14 h-14 sm:w-14 sm:h-14 rounded-[12px] sm:rounded-[13px] shadow-md flex items-center justify-center pointer-events-none select-none text-white font-bold overflow-hidden ${file.isImageIcon ? 'p-0 bg-transparent' : `p-2.5 sm:p-2 ${file.iconBgColor}`}`}>
         {file.isImageIcon ? (
           <img 
             src={file.iconPath} 
             alt={file.title} 
-            className="w-full h-full object-cover rounded-[13px]" 
+            className="w-full h-full object-cover rounded-[12px] sm:rounded-[13px]" 
           />
         ) : (
-          <svg className="w-8 h-8 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-8 h-8 sm:w-8 sm:h-8 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
         )}
       </div>
 
       <span 
-        className={`mt-2 text-[11px] text-white font-semibold text-center select-none break-words w-full tracking-wide transition-all duration-150 px-1.5 py-0.5 rounded-[4px] ${
+        className={`mt-1.5 text-[10px] sm:text-[11px] text-white font-medium sm:font-semibold text-center select-none break-words w-full tracking-wide transition-all duration-150 px-1 py-0.5 rounded-[4px] ${
           isSelected 
             ? 'bg-blue-600 shadow-[0_2px_8px_rgba(0,0,0,0.4)] max-h-none whitespace-normal' 
             : 'line-clamp-2 group-hover:bg-black/40 group-hover:backdrop-blur-md'
@@ -1027,7 +1087,7 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
         style={{
           textShadow: isSelected 
             ? 'none' 
-            : '0px 1px 2px rgba(0,0,0,0.9), 0px 2px 4px rgba(0,0,0,0.7), 0px 0px 8px rgba(0,0,0,0)'
+            : '0px 1px 2px rgba(0,0,0,0.9), 0px 2px 4px rgba(0,0,0,0.7)'
         }}
       >
         {file.title}
@@ -1040,114 +1100,172 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
 // 5. MACOS-STYLE WINDOW COMPONENT
 // ==========================================
 function DesktopWindow({ app, desktopRef, isActive, cascadeOffset, onFocus, onClose, onMinimize }) {
-  const width = 600;
-  const height = 560;
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
+  // Compute dynamic responsive sizes
+  const width = isMobile ? window.innerWidth : 600;
+  const height = isMobile ? window.innerHeight : 560; // Filled completely on mobile to eliminate white space gaps
 
   return (
     <motion.div
-      initial={{ scale: 0.93, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.93, opacity: 0 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-      drag
+      initial={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.93, opacity: 0 }}
+      animate={{ y: 0, scale: 1, opacity: 1 }}
+      exit={isMobile ? { y: "100%", opacity: 0 } : { scale: 0.93, opacity: 0 }}
+      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+      drag={!isMobile}
       dragHandleClassName="window-drag-handle"
       dragConstraints={desktopRef}
       dragElastic={0}
       dragMomentum={false}
       onPointerDown={onFocus}
-      className={`pointer-events-auto absolute flex flex-col bg-white/95 backdrop-blur-2xl border rounded-xl overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.35)] ${
-        isActive ? 'z-40 border-black/20 ring-1 ring-black/5' : 'z-30 border-neutral-300/40 opacity-95'
+      className={`pointer-events-auto absolute flex flex-col bg-white border overflow-hidden ${
+        isMobile 
+          ? 'z-40 inset-x-0 top-0 h-full w-full shadow-none border-none' // Clean edge-to-edge styling
+          : `rounded-xl shadow-[0_30px_70px_rgba(0,0,0,0.35)] ${isActive ? 'z-40 border-black/20 ring-1 ring-black/5' : 'z-30 border-neutral-300/40 opacity-95'}`
       }`}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
-        top: `20%`,
-        left: `30%`,
-        marginTop: `${cascadeOffset}px`,
-        marginLeft: `${cascadeOffset}px`
+        width: isMobile ? '100%' : `${width}px`,
+        height: isMobile ? '100%' : `${height}px`,
+        top: 0,
+        left: 0,
+        marginTop: isMobile ? 0 : `${cascadeOffset}px`,
+        marginLeft: isMobile ? 0 : `${cascadeOffset}px`
       }}
     >
       {/* App Window Header Bar */}
-      <div className="window-drag-handle flex items-center justify-between px-4 h-14 bg-neutral-200/40 border-b border-neutral-300/30 select-none cursor-grab active:cursor-grabbing shrink-0">
+      <div className="window-drag-handle flex items-center justify-between px-4 h-12 sm:h-14 bg-neutral-100 sm:bg-neutral-200/40 border-b border-neutral-200 select-none cursor-grab active:cursor-grabbing shrink-0">
         
-        {/* Button Section Container - Locked to exact button dimensions */}
+        {/* Button Section Container */}
         <div 
           className="flex items-center space-x-2 h-full cursor-pointer shrink-0"
-          style={{ width: '58px' }} // Exact pixel boundary box matching the three dots
-          onPointerDown={(e) => {
-            // Blocks drag state initialization exclusively over the controls
-            e.stopPropagation();
-          }}
+          style={{ width: '58px' }}
         >
-          <button 
-            onClick={(e) => { e.stopPropagation(); onClose(); }} 
-            className="w-3.5 h-3.5 rounded-full bg-[#FF5F56] border border-[#E0443E] focus:outline-none transition-colors cursor-pointer"
-          />
-          <button 
-            onClick={(e) => { e.stopPropagation(); onMinimize(); }} 
-            className="w-3.5 h-3.5 rounded-full bg-[#FFBD2E] border border-[#DEA123] focus:outline-none transition-colors cursor-pointer"
-          />
-          <button 
-            onClick={(e) => e.stopPropagation()}
-            className="w-3.5 h-3.5 rounded-full bg-[#27C93F] border border-[#1AAA29] focus:outline-none cursor-pointer"
-          />
+          {/* Completely remove red/yellow/green indicators if on mobile */}
+          {!isMobile && (
+            <>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onClose(); }} 
+                className="w-3.5 h-3.5 rounded-full bg-[#FF5F56] border border-[#E0443E] focus:outline-none"
+              />
+              <button 
+                onClick={(e) => { e.stopPropagation(); onMinimize(); }} 
+                className="w-3.5 h-3.5 rounded-full bg-[#FFBD2E] border border-[#DEA123] focus:outline-none"
+              />
+              <button 
+                onClick={(e) => e.stopPropagation()}
+                className="w-3.5 h-3.5 rounded-full bg-[#27C93F] border border-[#1AAA29] focus:outline-none"
+              />
+            </>
+          )}
         </div>
 
-        {/* Centered Title Heading */}
-        <div className="text-base font-bold text-neutral-700 text-center flex-1 truncate tracking-wide pointer-events-none px-2">
+        <div className="text-sm sm:text-base font-bold text-neutral-700 text-center flex-1 truncate tracking-wide pointer-events-none px-2">
           {app.title}
         </div>
         
-        {/* Asymmetrical balancing spacer matching the 58px button container size */}
-        <div style={{ width: '58px' }} className="shrink-0" />
+        {/* Right side close control button text transformation */}
+        <div style={{ width: '58px' }} className="shrink-0 flex justify-end">
+          {isMobile && (
+            <button 
+              onClick={(e) => { e.stopPropagation(); onClose(); }}
+              className="text-xs font-bold text-red-500 bg-red-50 px-2.5 py-1 rounded-full border border-red-200/50"
+            >
+              Close
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className="flex-1 overflow-auto pointer-events-auto">
+      <div className="flex-1 overflow-auto pointer-events-auto bg-white">
         {app.windowContent}
       </div>
     </motion.div>
   );
 }
 
-// ==========================================
-// 6. THE FLUID DOCK COMPONENT
-// ==========================================
+// ====================================================================
+// THE FIXED IOS / MACOS MOBILE DOCK (COMPACT CONTAINER WIDTH)
+// ====================================================================
 function Dock({ openApps, minimizedApps, toggleApp }) {
   const mouseX = useMotionValue(Infinity);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+
+  const isAnyAppOpenOnMobile = isMobile && Object.keys(openApps).some(
+    (id) => openApps[id] && !minimizedApps[id]
+  );
+
+  if (isAnyAppOpenOnMobile) return null;
 
   return (
     <motion.div
-      onMouseMove={(e) => mouseX.set(e.pageX)}
-      onMouseLeave={() => mouseX.set(Infinity)}
-      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 h-[80px] bg-white/[0.06] backdrop-blur-3xl backdrop-saturate-150 border border-white/20 rounded-[24px] flex items-end px-3 pb-3.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] z-50 transition-all duration-100"
+      onMouseMove={(e) => (isMobile ? null : mouseX.set(e.pageX))}
+      onMouseLeave={() => (isMobile ? null : mouseX.set(Infinity))}
+      className={`
+        absolute left-1/2 transform -translate-x-1/2 z-50 
+        ${isMobile 
+          ? 'bottom-5 w-[74%] h-[86px] bg-white/[0.18] backdrop-blur-2xl border border-white/15 rounded-[24px] px-4 flex items-center justify-center shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]' 
+          : 'bottom-8 h-[80px] max-w-none bg-white/[0.08] backdrop-blur-3xl backdrop-saturate-150 border border-white/20 rounded-[24px] flex items-end px-4 pb-3.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all duration-100'
+        }
+      `}
     >
-      <div className="flex items-end pl-1 space-x-2.5">
-        {DOCK_APPS.map(app => (
-          <DockIcon 
-            key={app.id}
-            app={app}
-            mouseX={mouseX}
-            isOpen={!!openApps[app.id]}
-            isMinimized={!!minimizedApps[app.id]}
-            onClick={() => toggleApp(app.id)}
-          />
-        ))}
-      </div>
+      {/* 1. LEFT CONTAINER GROUP (HIDDEN ON MOBILE) */}
+      {!isMobile && (
+        <div className="flex items-end space-x-2.5">
+          {DOCK_APPS.map(app => (
+            <DockIcon 
+              key={app.id}
+              app={app}
+              mouseX={mouseX}
+              isOpen={!!openApps[app.id]}
+              isMinimized={!!minimizedApps[app.id]}
+              onClick={() => toggleApp(app.id)}
+            />
+          ))}
+        </div>
+      )}
 
-      <div className="mx-3 mb-1 h-11 w-[2.5px] bg-white/35 rounded-full shrink-0 self-end" />
+      {/* 2. CENTERING DIVIDER ELEMENT (HIDDEN ON MOBILE) */}
+      {!isMobile && (
+        <div className="self-end mb-1 mx-4 h-11 w-[3px] bg-white/35 rounded-full shrink-0" />
+      )}
 
-      <div className="flex items-end pr-1 space-x-2.5">
-        <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
-          <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </SocialDockIcon>
+      {/* 3. CORE 4 SOCIALS / UTILITY CONTAINER */}
+      <div className={`flex items-center ${isMobile ? "space-x-4" : "space-x-2.5"}`}>
         
-        <SocialDockIcon href="https://www.linkedin.com/in/piyzard/" title="LinkedIn" bgColor="bg-[#0077B5]" mouseX={mouseX}>
-          <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
-        </SocialDockIcon>
+        {/* X ICON */}
+        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
+          <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
+            <svg className={`w-full h-full fill-current p-0 ${isMobile ? '!scale-100' : '!scale-100'}`} viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </SocialDockIcon>
+        </div>
+        
+        {/* LINKEDIN ICON */}
+        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
+          <SocialDockIcon href="https://www.linkedin.com/in/piyzard/" title="LinkedIn" bgColor="bg-[#0077B5]" mouseX={mouseX}>
+            <svg className={`w-full h-full fill-current p-0 ${isMobile ? '!scale-[1.15]' : '!scale-[1.15]'}`} viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
+          </SocialDockIcon>
+        </div>
 
-        <SocialDockIcon href="https://github.com/piyzard/" title="GitHub" bgColor="bg-[#24292e]" mouseX={mouseX}>
-          <svg className="w-full h-full fill-current" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        </SocialDockIcon>
+        {/* GITHUB ICON */}
+        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
+          <SocialDockIcon href="https://github.com/piyzard/" title="GitHub" bgColor="bg-[#24292e]" mouseX={mouseX}>
+            <svg className={`w-full h-full fill-current p-0 ${isMobile ? '!scale-[1.15]' : '!scale-[1.15]'}`} viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </SocialDockIcon>
+        </div>
+
+        {/* RESUME ICON */}
+        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
+          <SocialDockIcon 
+            href="/PiyushResume.pdf" 
+            title="Resume" 
+            bgColor="bg-gradient-to-tr from-[#3f0c10] to-[#802027] border border-[#a6323a]/10" 
+            mouseX={mouseX}
+          >
+            <svg className={`w-full h-full text-white p-0 ${isMobile ? '!scale-[1.15]' : '!scale-[1.15]'}`} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+          </SocialDockIcon>
+        </div>
       </div>
     </motion.div>
   );
