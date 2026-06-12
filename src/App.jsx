@@ -100,16 +100,243 @@ const DOCK_APPS = [
         </div>
       </div>
     ),
-    windowContent: (
-      <div className="p-4 h-full bg-[#FFFBEA] text-neutral-800 font-sans border-t border-neutral-200/50 select-text">
-        <div className="w-full h-full text-base leading-7 whitespace-pre-wrap">
-          ✏️ macOS Notes App clone.{"\n"}{"\n"}
-          - This content is now completely read-only on the live site.{"\n"}
-          - Smooth Framer Motion transitions.{"\n"}
-          - Built with Tailwind CSS.
+    windowContent: React.createElement(() => {
+      // 1. UPDATED RESUME DATA STRUCTURE (EASY TO EDIT)
+      const NOTES_DATA = {
+        skills: {
+          title: "Skills",
+          date: "June 12, 2026 at 12:32 PM",
+          previewText: "Programming Languages...",
+          content: (
+            <div className="space-y-5 text-[15px] text-neutral-800 font-normal leading-[1.6]">
+              <div>
+                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Programming Languages</p>
+                <p className="text-neutral-700">JavaScript (ES6+), TypeScript, Python, SQL, Java, C/C++</p>
+              </div>
+              <div>
+                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Frontend Engineering</p>
+                <p className="text-neutral-700">React.js, Next.js, Vite, HTML5, CSS3, Tailwind CSS, Framer Motion, Responsive Design, Progressive Web Apps (PWA)</p>
+              </div>
+              <div>
+                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Backend Engineering</p>
+                <p className="text-neutral-700">Node.js, Express.js, REST APIs, Authentication & Authorization, Firebase, MongoDB, PostgreSQL, MySQL</p>
+              </div>
+              <div>
+                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">AI & LLM Development</p>
+                <p className="text-neutral-700">OpenAI API, Claude, Claude Code, Google AI Studio, Gemini API, Cursor AI, GitHub Copilot, Perplexity AI, LangChain, Prompt Engineering, Retrieval-Augmented Generation (RAG), AI Agents, Workflow Automation</p>
+              </div>
+              <div>
+                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Data & Analytics</p>
+                <p className="text-neutral-700">Python, NumPy, Pandas, SQL Analytics, Data Visualization, ETL Pipelines, Business Intelligence</p>
+              </div>
+              <div>
+                <p className="font-bold text-neutral-900 border-b border-neutral-100 pb-0.5 mb-1">Cloud & DevOps</p>
+                <p className="text-neutral-700">Git, GitHub, Linux, Docker, Vercel, Netlify, CI/CD, MongoDB Atlas, Postman</p>
+              </div>
+            </div>
+          )
+        },
+        experience: {
+          title: "Experience",
+          date: "June 05, 2026 at 11:14 AM",
+          previewText: "Customer Support Associate, Software Engineer...",
+          content: (
+            <div className="space-y-6 text-[15px] text-neutral-800 font-normal leading-[1.6]">
+              {/* Role 1: Flipkart */}
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Customer Support Associate</p>
+                <p className="font-medium text-base text-neutral-800">Flipkart</p>
+                <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
+                  Bangalore (Aug. 2025 – Nov. 2025)
+                </p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                  <li>Resolved 10K+ customer inquiries and escalations weekly across multiple communication channels, maintaining high customer satisfaction through effective communication, active listening, and problem-solving skills.</li>
+                  <li>Collaborated with cross-functional operations, logistics, and support teams to streamline issue resolution processes, reducing average turnaround times by 25%.</li>
+                  <li>Leveraged AI-powered productivity tools and knowledge management systems to improve response efficiency, while strengthening leadership, negotiation, stakeholder management, and conflict-resolution abilities.</li>
+                </ul>
+              </div>
+
+              {/* Role 2: DevRhylme Foundation */}
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Software Engineer Intern</p>
+                <p className="font-medium text-base text-neutral-800">DevRhylme Foundation</p>
+                <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
+                  Kolkata (Jan. 2025 – Jun. 2025)
+                </p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                  <li>Developed AI and machine learning solutions using Python, automating data processing workflows and reducing manual effort by over 40% while improving overall system performance.</li>
+                  <li>Utilized modern AI development tools, LLM-powered workflows, and data analytics techniques to accelerate prototyping, debugging, and software delivery across multiple projects.</li>
+                  <li>Collaborated with multidisciplinary teams to deliver scalable software solutions, demonstrating technical leadership, project ownership, mentoring, and effective cross-functional communication.</li>
+                </ul>
+              </div>
+
+              {/* Role 3: The Portrait Gallery */}
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Software Engineer</p>
+                <p className="font-medium text-base text-neutral-800">The Portrait Gallery</p>
+                <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
+                  Kolkata (Sep. 2024 – Aug. 2025)
+                </p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                  <li>Designed and developed a high-performance business website that increased user engagement by 30% and contributed to a 25% growth in customer conversions.</li>
+                  <li>Built responsive web applications using modern frontend technologies, optimized SEO, and implemented analytics-driven improvements to enhance user experience and website performance.</li>
+                  <li>Managed project delivery from concept to deployment while coordinating with stakeholders, strengthening skills in client communication, leadership, project management, and strategic problem-solving.</li>
+                </ul>
+              </div>
+
+              {/* Role 4: Social Winter of Code */}
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Open Source Contributor</p>
+                <p className="font-medium text-base text-neutral-800">Social Winter of Code</p>
+                <p className="text-xs font-bold text-neutral-500 uppercase tracking-wide">
+                  Kolkata (Jan. 2025 – Mar. 2025)
+                </p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-800 pt-1.5">
+                  <li>Contributed to multiple open-source software projects, implementing frontend enhancements, API integrations, and performance optimizations that improved project efficiency by 35%.</li>
+                  <li>Collaborated with distributed development teams using Git, GitHub, code reviews, and Agile development practices to deliver production-ready features.</li>
+                  <li>Leveraged AI-assisted development tools to accelerate debugging, documentation, and feature implementation while enhancing teamwork, technical communication, and software engineering best practices.</li>
+                </ul>
+              </div>
+            </div>
+          )
+        },
+        projects: {
+          title: "Projects",
+          date: "May 28, 2026 at 03:45 PM",
+          previewText: "MERN AI Chatbot, Warranty Vault...",
+          content: (
+            <div className="space-y-6 text-[15px] text-neutral-800 font-normal leading-[1.6]">
+              {/* Project 1 */}
+              <div className="space-y-1.5">
+                <p className="font-bold text-neutral-900 text-base">MERN AI Chatbot</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+                  <li>Developed a full-stack AI chatbot application using the MERN stack, TypeScript, and OpenAI APIs, featuring JWT authentication, session management, and role-based access control.</li>
+                  <li>Designed scalable backend architecture with MongoDB database integration, secure REST APIs, and real-time conversation storage for seamless user interactions.</li>
+                </ul>
+              </div>
+
+              {/* Project 2 */}
+              <div className="space-y-1.5">
+                <p className="font-bold text-neutral-900 text-base">Warranty Vault</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+                  <li>Built an AI-powered Android application that automates receipt scanning and extracts billing and warranty information using intelligent document processing techniques.</li>
+                  <li>Implemented Room Database for secure local data storage and background notification services to proactively track warranty expiration timelines.</li>
+                </ul>
+              </div>
+
+              {/* Project 3 */}
+              <div className="space-y-1.5">
+                <p className="font-bold text-neutral-900 text-base">Bacola Shopping</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+                  <li>Engineered a scalable e-commerce application using React, Tailwind CSS, Firebase, and Stripe, enabling secure authentication, payment processing, and product management.</li>
+                  <li>Developed responsive user interfaces and optimized application performance through modern frontend architecture, API integration, and state management practices.</li>
+                </ul>
+              </div>
+
+              {/* Project 4 */}
+              <div className="space-y-1.5">
+                <p className="font-bold text-neutral-900 text-base">Personal Portfolio</p>
+                <ul className="list-disc list-outside pl-5 space-y-1 text-neutral-700">
+                  <li>Designed and developed a high-performance portfolio website using React, Vite, Tailwind CSS, and Framer Motion, showcasing projects, technical expertise, and professional achievements.[cite: 2]</li>
+                  <li>Implemented responsive design principles, SEO optimization, and interactive UI animations to enhance user engagement and improve overall web performance.</li>
+                </ul>
+              </div>
+            </div>
+          )
+        },
+        certifications: {
+          title: "Certifications",
+          date: "May 14, 2026 at 09:20 AM",
+          previewText: "Advanced Prompt Engineering...",
+          content: (
+            <div className="space-y-4 text-[15px] text-neutral-800 font-normal leading-[1.6]">
+              <ul className="list-disc list-outside pl-5 space-y-2 text-neutral-900 font-medium">
+                <li>Advanced Prompt Engineering & LLM Applications</li>
+                <li>AI Agent Development & Workflow Automation</li>
+                <li>Full Stack Web Development</li>
+                <li>Cloud Application Architecture</li>
+                <li>Modern JavaScript & TypeScript Development</li>
+                <li>Database Design & Data Analytics</li>
+              </ul>
+            </div>
+          )
+        },
+        education: {
+          title: "Education",
+          date: "April 30, 2026 at 04:10 PM",
+          previewText: "Bachelor of Science...",
+          content: (
+            <div className="space-y-4 text-[15px] text-neutral-800 font-normal leading-[1.6]">
+              <div className="space-y-1">
+                <p className="font-bold text-neutral-900 text-lg">Bachelor of Science in Computer Science</p>
+                <p className="text-neutral-800 font-medium text-base">University of Calcutta</p>
+                
+                <div className="pt-3">
+                  <p className="font-bold text-neutral-900 text-sm tracking-wide uppercase border-b border-neutral-100 pb-1 mb-2">Relevant Areas</p>
+                  <p className="text-neutral-700 font-medium">
+                    Data Structures & Algorithms • Database Systems • Software Engineering • Operating Systems • Computer Networks • Artificial Intelligence
+                  </p>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      };
+
+      const [activeTab, setActiveTab] = useState('skills');
+
+      return (
+        <div className="flex h-full bg-white text-neutral-800 font-sans select-text border-t border-neutral-200/40">
+          
+          {/* LEFT SIDEBAR: Notes Navigation List (Matches image_a1ed1c.png & image_a1ecc3.png styles) */}
+          <div className="w-[32%] bg-[#F9F9F9] border-r border-neutral-200/60 p-2.5 flex flex-col space-y-1 shrink-0 select-none overflow-y-auto">
+            {Object.keys(NOTES_DATA).map((key) => {
+              const item = NOTES_DATA[key];
+              const isSelected = activeTab === key;
+              
+              // Extract just the short date string (DD/MM/YYYY) for the small list row indicator
+              const displayDate = key === 'skills' ? '12/06/2026' : 
+                                  key === 'experience' ? '05/06/2026' : 
+                                  key === 'projects' ? '28/05/2026' : 
+                                  key === 'certifications' ? '14/05/2026' : '30/04/2026';
+
+              return (
+                <button
+                  key={key}
+                  onClick={() => setActiveTab(key)}
+                  className={`w-full text-left p-3 rounded-xl transition-all duration-150 focus:outline-none ${
+                    isSelected
+                      ? 'bg-[#FCE285] text-neutral-900 shadow-sm'
+                      : 'hover:bg-neutral-200/40 text-neutral-700'
+                  }`}
+                >
+                  <p className="font-bold text-sm tracking-tight truncate">{item.title}</p>
+                  <div className={`text-xs mt-0.5 font-medium flex items-baseline space-x-1 ${isSelected ? 'text-neutral-700' : 'text-neutral-500'}`}>
+                    <span className="shrink-0">{displayDate}</span>
+                    <span className={`block font-normal truncate flex-1 ${isSelected ? 'text-neutral-600' : 'text-neutral-400'}`}>
+                      {item.previewText}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* RIGHT VIEWPORT: Note Content Canvas View */}
+          <div className="flex-1 bg-white overflow-y-auto px-10 py-6 space-y-5">
+            <div className="text-center select-none pt-1">
+              <span className="text-xs font-medium text-neutral-400 tracking-wide">{NOTES_DATA[activeTab].date}</span>
+            </div>
+
+            <h1 className="text-[32px] font-extrabold tracking-tight text-neutral-900 pt-1">
+              {NOTES_DATA[activeTab].title}
+            </h1>
+
+            {NOTES_DATA[activeTab].content}
+          </div>
         </div>
-      </div>
-    )
+      );
+    })
   }
 ];
 
