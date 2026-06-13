@@ -10,7 +10,7 @@ const DOCK_APPS = [
     title: 'About Me',
     iconBgColor: 'bg-gradient-to-tr from-slate-200 to-white',
     isImageIcon: true,
-    iconContent: <img src="/bitmoji.png" alt="Avatar" className="w-full h-full object-cover rounded-[12px]" />,
+    iconContent: <img src="/app-icons/bitmoji.png" alt="Avatar" className="w-full h-full object-cover rounded-[12px]" />,
     windowContent: (
       <div className="p-6 text-neutral-800 space-y-6 select-text font-sans pb-4">
         {/* Title */}
@@ -20,7 +20,7 @@ const DOCK_APPS = [
         <div className="flex flex-col sm:flex-row items-stretch sm:space-x-6 space-y-4 sm:space-y-0">
           {/* Your personalized image asset wrapper */}
           <img 
-            src="/piyush-prasad.jpg" 
+            src="/about-me/piyush-prasad.jpg" 
             alt="Piyush Prasad" 
             className="w-32 h-36 rounded-2xl object-cover shadow-sm flex-shrink-0" 
           />
@@ -89,7 +89,7 @@ const DOCK_APPS = [
     title: 'Notes',
     iconBgColor: 'bg-transparent',
     isImageIcon: true,
-    iconContent: <img src="/notes-icon.png" alt="Notes" className="w-full h-full object-cover rounded-[12px]" />,
+    iconContent: <img src="/app-icons/notes-icon.png" alt="Notes" className="w-full h-full object-cover rounded-[12px]" />,
     windowContent: React.createElement(() => {
       // 1. ALL ORIGINAL RESUME DATA RESTORED
       const NOTES_DATA = {
@@ -389,7 +389,7 @@ const INITIAL_DESKTOP_FILES = [
     id: 'file-1',
     title: 'MERN AI Chatbot',
     isImageIcon: true,
-    iconPath: '/mern-ai-chatbot.png',
+    iconPath: '/app-icons/mern-ai-chatbot.png',
     windowContent: React.createElement(() => {
       // Internal state to track which image is currently popped up/clicked
       const [activeImg, setActiveImg] = useState(null);
@@ -516,7 +516,7 @@ const INITIAL_DESKTOP_FILES = [
     id: 'file-2',
     title: 'Warranty Vault',
     isImageIcon: true,
-    iconPath: '/warranty-vault.png',
+    iconPath: '/app-icons/warranty-vault.png',
     windowContent: React.createElement(() => {
       const [activeImg, setActiveImg] = useState(null);
 
@@ -640,7 +640,7 @@ const INITIAL_DESKTOP_FILES = [
     id: 'file-3',
     title: 'The Portrait Gallery',
     isImageIcon: true,
-    iconPath: '/the-portrait-gallery.png',
+    iconPath: '/app-icons/the-portrait-gallery.png',
     windowContent: React.createElement(() => {
       const [activeImg, setActiveImg] = useState(null);
 
@@ -764,7 +764,7 @@ const INITIAL_DESKTOP_FILES = [
     id: 'file-4',
     title: 'Bacola Shopping',
     isImageIcon: true,
-    iconPath: '/bacola-shopping.png',
+    iconPath: '/app-icons/bacola-shopping.png',
     windowContent: React.createElement(() => {
       const [activeImg, setActiveImg] = useState(null);
 
@@ -889,7 +889,7 @@ const INITIAL_DESKTOP_FILES = [
     title: 'Tic-Tac-Toe',
     iconBgColor: 'bg-gradient-to-tr from-neutral-500 to-neutral-700',
     isImageIcon: true,
-    iconPath: '/tic-tac-toe.png', // RESTORED
+    iconPath: '/app-icons/tic-tac-toe.png', // RESTORED
     windowContent: <TicTacToeGame />
   },
 ];
@@ -938,13 +938,13 @@ function App() {
         id: 'about-me',
         title: 'About Me',
         isImageIcon: true,
-        iconPath: '/bitmoji.png',
+        iconPath: '/app-icons/bitmoji.png',
       },
       {
         id: 'notes',
         title: 'Notes',
         isImageIcon: true, // FIXED: Enables clean image rendering loop on the home screen wallpaper matrix
-        iconPath: '/notes-icon.png', // FIXED: Maps directly to your public folder icon file asset path
+        iconPath: '/app-icons/notes-icon.png', // FIXED: Maps directly to your public folder icon file asset path
       },
       ...INITIAL_DESKTOP_FILES
     ];
