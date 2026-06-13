@@ -1009,7 +1009,7 @@ function App() {
       {/* DESKTOP WORKSPACE LAYER */}
       {typeof window !== 'undefined' && window.innerWidth < 640 ? (
         /* DYNAMIC MOBILE SYMMETRICAL GRID CONTAINER */
-        <div className="absolute inset-0 pt-16 pb-32 px-5 grid grid-cols-4 grid-rows-6 gap-y-4 justify-items-center items-start content-start pointer-events-none z-10">
+        <div className="absolute inset-0 pt-6 px-5 grid grid-cols-4 grid-rows-6 gap-y-10 justify-items-center items-start content-start pointer-events-none z-10">
           {desktopFiles.map((file) => (
             <div key={file.id} className="relative w-full flex justify-center pointer-events-auto">
               <DesktopGridIcon
@@ -1422,9 +1422,13 @@ function SocialDockIcon({ href, title, bgColor, children, mouseX }) {
 function TicTacToeGame() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
-  const [gameMode, setGameMode] = useState('cpu'); // 'cpu' or 'pvp'
+  const [gameMode, setGameMode] = useState('cpu');
   const [isCpuThinking, setIsCpuThinking] = useState(false);
 
+  // ADD THIS LINE: This defines the variable causing the ReferenceError
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  
+  // ... rest of your logic
   const calculateWinner = (squares) => {
     const lines = [
       [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -1513,78 +1517,59 @@ function TicTacToeGame() {
   };
 
   return (
-    <div className="h-full w-full bg-white flex flex-col justify-between p-6 font-sans select-none text-neutral-800">
+    <div className="h-full w-full bg-white flex flex-col items-center p-4 font-sans select-none overflow-hidden relative">
       
-      {/* Upper Control Strip */}
-      <div className="flex items-center justify-between border border-neutral-200 p-2.5 rounded-2xl shadow-sm shrink-0">
-        <div className="flex space-x-1.5 bg-neutral-100 p-1 rounded-xl">
+      {/* 1. Header Bar: Constrained to 280px to match grid and button width */}
+      <div className={`w-full max-w-[280px] flex items-center justify-between border border-neutral-200 p-2 rounded-2xl shadow-sm shrink-0 ${isMobile ? 'mt-8' : 'mt-0'}`}>
+        <div className="flex space-x-1 bg-neutral-100 p-0.5 rounded-lg">
           <button 
             onClick={() => { setGameMode('cpu'); resetGame(); }}
-            className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${gameMode === 'cpu' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
+            // Increased font to text-xs
+            className={`text-xs font-bold px-3 py-1.5 rounded-md transition-all ${gameMode === 'cpu' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
           >
-            vs Computer
+            CPU
           </button>
           <button 
             onClick={() => { setGameMode('pvp'); resetGame(); }}
-            className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${gameMode === 'pvp' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
+            // Increased font to text-xs
+            className={`text-xs font-bold px-3 py-1.5 rounded-md transition-all ${gameMode === 'pvp' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-800'}`}
           >
-            Pass & Play
+            PvP
           </button>
         </div>
 
-        <div className="text-sm font-bold text-neutral-800 px-2">
-          {winner ? (
-            <span>Winner: {winner}</span>
-          ) : isDraw ? (
-            <span className="text-neutral-500">It is a Draw</span>
-          ) : isCpuThinking ? (
-            <span className="text-neutral-400 animate-pulse">CPU is thinking</span>
-          ) : (
-            <span className="text-neutral-600">Turn: {isXNext ? 'X' : 'O'}</span>
-          )}
+        <div className="text-xs font-bold text-neutral-700 truncate px-2">
+          {winner ? `${winner} Won!` : isDraw ? 'Draw' : isCpuThinking ? 'Thinking...' : `Turn: ${isXNext ? 'X' : 'O'}`}
         </div>
       </div>
 
-      {/* Playfield Canvas Grid Matrix */}
-      <div className="flex-1 flex items-center justify-center my-4">
-        <div className="grid grid-cols-3 gap-3 w-72 h-72">
+      {/* 2. Game Grid: Locked to 280px width for alignment */}
+      <div className="flex-grow flex items-center justify-center w-full max-w-[280px]">
+        <div className="grid grid-cols-3 gap-3 w-full aspect-square">
           {board.map((square, idx) => {
             const isWinningSquare = winnerInfo?.line.includes(idx);
-            
             return (
-              <motion.button
+              <button
                 key={idx}
-                whileHover={{ scale: square || winner || isCpuThinking ? 1 : 1.04 }}
-                whileTap={{ scale: 0.96 }}
                 onClick={() => handleClick(idx)}
-                className={`w-full h-full rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-sm border transition-all bg-white text-neutral-800 border-neutral-200 hover:border-neutral-300 hover:shadow-md ${
-                  isWinningSquare ? 'ring-2 ring-neutral-800 bg-neutral-100' : ''
+                className={`w-full h-full rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-sm border transition-all bg-white ${
+                  isWinningSquare ? 'ring-2 ring-neutral-900 bg-neutral-50' : 'border-neutral-200 hover:border-neutral-300'
                 }`}
               >
-                {square && (
-                  <motion.span
-                    initial={{ scale: 0.4, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                  >
-                    {square}
-                  </motion.span>
-                )}
-              </motion.button>
+                {square}
+              </button>
             );
           })}
         </div>
       </div>
 
-      {/* Operational Game Reset Button */}
-      <div className="shrink-0 flex justify-center">
-        <button
-          onClick={resetGame}
-          className="w-full max-w-xs bg-neutral-900 hover:bg-neutral-800 text-white text-sm font-bold py-3 rounded-xl shadow-md transition-all active:scale-[0.99]"
-        >
-          Restart Match
-        </button>
-      </div>
+      {/* 3. Restart Button: Locked to 280px width for alignment */}
+      <button
+        onClick={resetGame}
+        className="w-full max-w-[280px] bg-neutral-900 hover:bg-neutral-800 text-white text-sm font-bold py-3 rounded-xl shadow-md transition-all active:scale-[0.98] shrink-0"
+      >
+        RESTART MATCH
+      </button>
     </div>
   );
 }
