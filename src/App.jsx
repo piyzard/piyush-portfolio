@@ -971,6 +971,7 @@ function App() {
   const handleCloseApp = (id) => {
     setOpenApps(prev => ({ ...prev, [id]: false }));
     setSpawnOrder(old => old.filter(appId => appId !== id));
+    setSelectedFileId(null); // FIXED: De-selects and un-highlights the grid icon immediately upon closing the app window
   };
 
   const handleDesktopClick = (e) => {
@@ -983,7 +984,7 @@ function App() {
     <div 
       ref={desktopRef}
       onClick={handleDesktopClick}
-      className="relative w-screen h-screen overflow-hidden bg-cover bg-center select-none"
+      className="relative w-screen h-dvh overflow-hidden bg-cover bg-center select-none"
       style={{ 
         backgroundImage: `url('/desktop-bg.jpg')`, 
       }}
@@ -1040,6 +1041,9 @@ function App() {
 // ==========================================
 function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  
+  // FIXED MOBILE HIGHLIGHT CONTROL: Completely bypass selection styles if on mobile viewports
+  const showSelectionStyles = isSelected && !isMobile;
 
   return (
     <motion.div 
@@ -1055,7 +1059,7 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
       onClick={() => { if (isMobile) onDoubleClick(); }}
       onDoubleClick={onDoubleClick}
       className={`pointer-events-auto flex flex-col items-center justify-start w-[76px] sm:w-24 p-1 sm:p-2 rounded-xl cursor-grab active:cursor-grabbing group transition-colors duration-200 ${
-        isSelected ? 'bg-white/15 border-white/20 shadow-sm' : 'hover:bg-white/10 border-transparent hover:border-white/10'
+        showSelectionStyles ? 'bg-white/15 border-white/20 shadow-sm' : 'bg-transparent border-transparent'
       } border`}
       style={{ 
         position: 'absolute',
@@ -1080,12 +1084,12 @@ function DesktopGridIcon({ file, isSelected, onSelect, onDoubleClick }) {
 
       <span 
         className={`mt-1.5 text-[10px] sm:text-[11px] text-white font-medium sm:font-semibold text-center select-none break-words w-full tracking-wide transition-all duration-150 px-1 py-0.5 rounded-[4px] ${
-          isSelected 
+          showSelectionStyles 
             ? 'bg-blue-600 shadow-[0_2px_8px_rgba(0,0,0,0.4)] max-h-none whitespace-normal' 
             : 'line-clamp-2 group-hover:bg-black/40 group-hover:backdrop-blur-md'
         }`}
         style={{
-          textShadow: isSelected 
+          textShadow: showSelectionStyles 
             ? 'none' 
             : '0px 1px 2px rgba(0,0,0,0.9), 0px 2px 4px rgba(0,0,0,0.7)'
         }}
@@ -1229,8 +1233,8 @@ function Dock({ openApps, minimizedApps, toggleApp }) {
         <div className="self-end mb-1 mx-4 h-11 w-[3px] bg-white/35 rounded-full shrink-0" />
       )}
 
-      {/* 3. CORE 4 SOCIALS / UTILITY CONTAINER */}
-      <div className={`flex items-center ${isMobile ? "space-x-4" : "space-x-2.5"}`}>
+      {/* 3. CORE 4 SOCIALS / UTILITY CONTAINER - FIXED ALIGNMENT */}
+      <div className={`flex items-end ${isMobile ? "space-x-4" : "space-x-2.5"}`}>
         
         {/* X ICON */}
         <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
