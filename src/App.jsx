@@ -87,19 +87,9 @@ const DOCK_APPS = [
   {
     id: 'notes',
     title: 'Notes',
-    iconBgColor: 'bg-gradient-to-b from-[#FBF3D5] to-[#F5DF8D]',
-    isImageIcon: false,
-    iconContent: (
-      <div className="w-full h-full relative flex flex-col justify-between p-0.5 rounded-[12px] overflow-hidden border border-[#E1C24A]/40 shadow-inner">
-        <div className="w-full h-[22%] bg-gradient-to-b from-[#EAA83A] to-[#DF9526] rounded-t-[10px] border-b border-[#C37E15]" />
-        <div className="w-full h-[78%] bg-[#FFFBEA] flex flex-col space-y-[4px] pt-1.5 px-1">
-          <div className="w-full h-[1.5px] bg-[#E8DCB8]" />
-          <div className="w-5/6 h-[1.5px] bg-[#E8DCB8]" />
-          <div className="w-full h-[1.5px] bg-[#E8DCB8]" />
-          <div className="w-2/3 h-[1.5px] bg-[#E8DCB8]" />
-        </div>
-      </div>
-    ),
+    iconBgColor: 'bg-transparent', // Neutral background for custom image assets
+    isImageIcon: true, // Tells the system this is a graphics asset layer
+    iconContent: <img src="/notes-icon.png" alt="Notes" className="w-full h-full object-cover rounded-[12px]" />,
     windowContent: React.createElement(() => {
       // 1. ALL ORIGINAL RESUME DATA RESTORED
       const NOTES_DATA = {
@@ -928,10 +918,8 @@ function App() {
       {
         id: 'notes',
         title: 'Notes',
-        isImageIcon: false,
-        iconBgColor: 'bg-gradient-to-b from-[#FBF3D5] to-[#F5DF8D]',
-        // Simple document vector fallback for home screen notes icon grid format
-        iconPath: null, 
+        isImageIcon: true, // FIXED: Enables clean image rendering loop on the home screen wallpaper matrix
+        iconPath: '/notes-icon.png', // FIXED: Maps directly to your public folder icon file asset path
       },
       ...INITIAL_DESKTOP_FILES
     ];
@@ -942,14 +930,18 @@ function App() {
     const staticAllocatedFiles = targetFiles.map((file, index) => {
       const slot = slotsToUse[index % slotsToUse.length];
       
-      // Tightened columns and rows to perfectly fit larger icons on mobile screen
-      const baseX = isMobile ? (6 + slot.col * 24) : (8 + slot.col * 16); 
+      // COMPUTING BALANCED VERTICAL COLUMNS:
+      // Breaks down the mobile window bounds symmetrically into 4 columns
+      const mobileCenteringFormula = `calc(${((slot.col + 0.5) / 4) * 100}% - 28px)`;
+      
+      const baseX = isMobile ? 0 : (8 + slot.col * 16); 
       const baseY = isMobile ? (6 + slot.row * 15) : (8 + slot.row * 22); 
 
       return {
         ...file,
-        initialX: `${baseX + slot.jitterX}%`,
-        initialY: `${baseY + slot.jitterY}%`,
+        // FIXED ALIGNMENT LOCK: Strips horizontal jitter completely on mobile viewports so columns stay symmetrical
+        initialX: isMobile ? mobileCenteringFormula : `${baseX + slot.jitterX}%`,
+        initialY: isMobile ? `${baseY}%` : `${baseY + slot.jitterY}%`,
       };
     });
     
@@ -990,17 +982,39 @@ function App() {
       }}
     >
       {/* DESKTOP WORKSPACE LAYER */}
-      <div className="desktop-workspace-layer absolute inset-0 z-10 w-full h-full">
-        {desktopFiles.map(file => (
-          <DesktopGridIcon 
-            key={file.id} 
-            file={file} 
-            isSelected={selectedFileId === file.id}
-            onSelect={() => setSelectedFileId(file.id)}
-            onDoubleClick={() => toggleApp(file.id)} 
-          />
-        ))}
-      </div>
+      {typeof window !== 'undefined' && window.innerWidth < 640 ? (
+        /* DYNAMIC MOBILE SYMMETRICAL GRID CONTAINER */
+        <div className="absolute inset-0 pt-16 pb-32 px-5 grid grid-cols-4 grid-rows-6 gap-y-4 justify-items-center items-start content-start pointer-events-none z-10">
+          {desktopFiles.map((file) => (
+            <div key={file.id} className="relative w-full flex justify-center pointer-events-auto">
+              <DesktopGridIcon
+                file={{
+                  ...file,
+                  // Resets dynamic styles on mobile to let the native CSS Grid track coordinates perfectly
+                  initialX: 'auto',
+                  initialY: 'auto'
+                }}
+                isSelected={selectedFileId === file.id}
+                onSelect={() => setSelectedFileId(file.id)}
+                onDoubleClick={() => toggleApp(file.id)}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* STANDARD DESKTOP POSITION ABSOLUTE MAP LAYER */
+        <div className="desktop-workspace-layer absolute inset-0 z-10 w-full h-full">
+          {desktopFiles.map(file => (
+            <DesktopGridIcon 
+              key={file.id} 
+              file={file} 
+              isSelected={selectedFileId === file.id}
+              onSelect={() => setSelectedFileId(file.id)}
+              onDoubleClick={() => toggleApp(file.id)} 
+            />
+          ))}
+        </div>
+      )}
 
       {/* WINDOWS LAYER */}
       <div className="absolute inset-0 z-20 pointer-events-none">
@@ -1188,7 +1202,7 @@ function DesktopWindow({ app, desktopRef, isActive, cascadeOffset, onFocus, onCl
 }
 
 // ====================================================================
-// THE FIXED IOS / MACOS MOBILE DOCK (COMPACT CONTAINER WIDTH)
+// 6. THE FIXED IOS / MACOS MOBILE DOCK (COMPACT CONTAINER WIDTH)
 // ====================================================================
 function Dock({ openApps, minimizedApps, toggleApp }) {
   const mouseX = useMotionValue(Infinity);
@@ -1207,70 +1221,84 @@ function Dock({ openApps, minimizedApps, toggleApp }) {
       className={`
         absolute left-1/2 transform -translate-x-1/2 z-50 
         ${isMobile 
-          ? 'bottom-5 w-[74%] h-[86px] bg-white/[0.18] backdrop-blur-2xl border border-white/15 rounded-[24px] px-4 flex items-center justify-center shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]' 
+          /* CHANGED: w-[85%] to w-[90%] and matched px-5 exactly to mirror the home screen grid bounds precisely */
+          ? 'bottom-5 w-[90%] h-[86px] bg-white/[0.18] backdrop-blur-2xl border border-white/15 rounded-[32px] px-5 flex items-center justify-between shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)]' 
           : 'bottom-8 h-[80px] max-w-none bg-white/[0.08] backdrop-blur-3xl backdrop-saturate-150 border border-white/20 rounded-[24px] flex items-end px-4 pb-3.5 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.4)] transition-all duration-100'
         }
       `}
     >
-      {/* 1. LEFT CONTAINER GROUP (HIDDEN ON MOBILE) */}
-      {!isMobile && (
-        <div className="flex items-end space-x-2.5">
-          {DOCK_APPS.map(app => (
-            <DockIcon 
-              key={app.id}
-              app={app}
-              mouseX={mouseX}
-              isOpen={!!openApps[app.id]}
-              isMinimized={!!minimizedApps[app.id]}
-              onClick={() => toggleApp(app.id)}
-            />
-          ))}
+      {/* 1. MOBILE RESPONSIVE LAYOUT ENGINE (X, LINKEDIN, GITHUB, RESUME ONLY) */}
+      {isMobile ? (
+        <div className="w-full flex items-center justify-between">
+          {/* X SOCIAL ICON */}
+          <div className="w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14 flex-shrink-0">
+            <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
+              <svg className="w-full h-full fill-current p-0 !scale-100" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </SocialDockIcon>
+          </div>
+
+          {/* LINKEDIN SOCIAL ICON */}
+          <div className="w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14 flex-shrink-0">
+            <SocialDockIcon href="https://www.linkedin.com/in/piyzard/" title="LinkedIn" bgColor="bg-[#0077B5]" mouseX={mouseX}>
+              <svg className="w-full h-full fill-current p-0 !scale-[1.15]" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
+            </SocialDockIcon>
+          </div>
+
+          {/* GITHUB SOCIAL ICON */}
+          <div className="w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14 flex-shrink-0">
+            <SocialDockIcon href="https://github.com/piyzard/" title="GitHub" bgColor="bg-[#24292e]" mouseX={mouseX}>
+              <svg className="w-full h-full fill-current p-0 !scale-[1.15]" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </SocialDockIcon>
+          </div>
+
+          {/* RESUME ICON */}
+          <div className="w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14 flex-shrink-0">
+            <SocialDockIcon href="/PiyushResume.pdf" title="Resume" bgColor="bg-gradient-to-tr from-[#3f0c10] to-[#802027] border border-[#a6323a]/10" mouseX={mouseX}>
+              <svg className="w-full h-full text-white p-0 !scale-[1.15]" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </SocialDockIcon>
+          </div>
         </div>
+      ) : (
+        /* 2. STANDARD DESKTOP PRESENTATION LAYER (LEAVE UNTOUCHED) */
+        <>
+          <div className="flex items-end space-x-2.5">
+            {DOCK_APPS.map(app => (
+              <DockIcon 
+                key={app.id}
+                app={app}
+                mouseX={mouseX}
+                isOpen={!!openApps[app.id]}
+                isMinimized={!!minimizedApps[app.id]}
+                onClick={() => toggleApp(app.id)}
+              />
+            ))}
+          </div>
+
+          <div className="self-end mb-1 mx-4 h-11 w-[3px] bg-white/35 rounded-full shrink-0" />
+
+          <div className="flex items-end space-x-2.5">
+            <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
+              <svg className="w-full h-full fill-current p-0 !scale-100" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </SocialDockIcon>
+            
+            <SocialDockIcon href="https://www.linkedin.com/in/piyzard/" title="LinkedIn" bgColor="bg-[#0077B5]" mouseX={mouseX}>
+              <svg className="w-full h-full fill-current p-0 !scale-[1.15]" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
+            </SocialDockIcon>
+
+            <SocialDockIcon href="https://github.com/piyzard/" title="GitHub" bgColor="bg-[#24292e]" mouseX={mouseX}>
+              <svg className="w-full h-full fill-current p-0 !scale-[1.15]" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </SocialDockIcon>
+
+            <SocialDockIcon href="/PiyushResume.pdf" title="Resume" bgColor="bg-gradient-to-tr from-[#3f0c10] to-[#802027] border border-[#a6323a]/10" mouseX={mouseX}>
+              <svg className="w-full h-full text-white p-0 !scale-[1.15]" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </SocialDockIcon>
+          </div>
+        </>
       )}
-
-      {/* 2. CENTERING DIVIDER ELEMENT (HIDDEN ON MOBILE) */}
-      {!isMobile && (
-        <div className="self-end mb-1 mx-4 h-11 w-[3px] bg-white/35 rounded-full shrink-0" />
-      )}
-
-      {/* 3. CORE 4 SOCIALS / UTILITY CONTAINER - FIXED ALIGNMENT */}
-      <div className={`flex items-end ${isMobile ? "space-x-4" : "space-x-2.5"}`}>
-        
-        {/* X ICON */}
-        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
-          <SocialDockIcon href="https://x.com/notpiyzard/" title="X" bgColor="bg-black" mouseX={mouseX}>
-            <svg className={`w-full h-full fill-current p-0 ${isMobile ? '!scale-100' : '!scale-100'}`} viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </SocialDockIcon>
-        </div>
-        
-        {/* LINKEDIN ICON */}
-        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
-          <SocialDockIcon href="https://www.linkedin.com/in/piyzard/" title="LinkedIn" bgColor="bg-[#0077B5]" mouseX={mouseX}>
-            <svg className={`w-full h-full fill-current p-0 ${isMobile ? '!scale-[1.15]' : '!scale-[1.15]'}`} viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
-          </SocialDockIcon>
-        </div>
-
-        {/* GITHUB ICON */}
-        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
-          <SocialDockIcon href="https://github.com/piyzard/" title="GitHub" bgColor="bg-[#24292e]" mouseX={mouseX}>
-            <svg className={`w-full h-full fill-current p-0 ${isMobile ? '!scale-[1.15]' : '!scale-[1.15]'}`} viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          </SocialDockIcon>
-        </div>
-
-        {/* RESUME ICON */}
-        <div className={isMobile ? "w-14 h-14 flex items-center justify-center [&_a]:!w-14 [&_a]:!h-14 [&_a_div]:!w-14 [&_a_div]:!h-14" : ""}>
-          <SocialDockIcon 
-            href="/PiyushResume.pdf" 
-            title="Resume" 
-            bgColor="bg-gradient-to-tr from-[#3f0c10] to-[#802027] border border-[#a6323a]/10" 
-            mouseX={mouseX}
-          >
-            <svg className={`w-full h-full text-white p-0 ${isMobile ? '!scale-[1.15]' : '!scale-[1.15]'}`} fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-          </SocialDockIcon>
-        </div>
-      </div>
     </motion.div>
   );
 }
